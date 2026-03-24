@@ -1091,7 +1091,6 @@ function startGame() {
   meters = { ...POST_STANCES[selectedStance].startMeters };
   activeComments = COMMENT_SETS[selectedStance];
   actions_log.length = 0;
-  trackPlay('ep2');
   showScreen('screen-game');
   loadComment();
 }
@@ -1178,6 +1177,7 @@ function updateMeters(old) {
 }
 
 function showResult() {
+  trackPlay('ep2');
   const echo = meters.echo;
   const circle = document.getElementById('echo-circle');
   const title = document.getElementById('echo-title');

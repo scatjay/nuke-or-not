@@ -2102,7 +2102,6 @@ function buildActiveQuestions() {
 function startGame() {
   currentRound = 0;
   stats = { rage: 0, reason: 0, influence: 0, cred: 0 };
-  trackPlay('ep1');
   buildActiveQuestions();
   showScreen('screen-game');
   loadRound();
@@ -2303,6 +2302,7 @@ function updateStatsDisplay(flash, old) {
 
 // ── RESULT ──
 function showResult() {
+  trackPlay('ep1');
   const archetype = determineArchetype();
   const a = ARCHETYPES[archetype];
 

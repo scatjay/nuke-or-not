@@ -746,7 +746,6 @@ function selectSite(siteId) {
 
 function confirmSite() {
   if (!selectedSiteId) return;
-  trackPlay('ep3');
   const role = ROLES[selectedRoleId];
   currentRound = 0;
   stats = { ...role.start };
@@ -901,6 +900,7 @@ function updateMeters() {
 // RESULT
 // ════════════════════════════════════════
 function showResult() {
+  trackPlay('ep3');
   const { opinion, trust, political } = stats;
   const site = SITES.find(s => s.id === selectedSiteId);
   const dominant = Object.entries(strategyCounts).sort((a,b) => b[1]-a[1])[0][0];
