@@ -1,0 +1,2440 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>臉腫了嗎？｜鬼島核電篇 EP.1</title>
+<meta property="og:title" content="臉腫了嗎？｜你是臉腫的深綠，還是幸災樂禍的深藍？">
+<meta property="og:description" content="總統宣布重啟核電，615則留言炸鍋。系統隨機分配你的立場——你的直覺和你的「人設」一樣嗎？">
+<meta property="og:image" content="https://scatjay.github.io/nuke-or-not/ep1/cover.png">
+<meta property="og:url" content="https://scatjay.github.io/nuke-or-not/ep1/">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+  :root {
+    --green: #16a34a;
+    --green-dark: #14532d;
+    --green-light: #bbf7d0;
+    --blue: #1d4ed8;
+    --blue-dark: #1e3a8a;
+    --blue-light: #bfdbfe;
+    --red: #dc2626;
+    --yellow: #ca8a04;
+    --gray: #6b7280;
+    --dark: #0f172a;
+    --darker: #020617;
+    --card: #1e293b;
+    --border: #334155;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans TC', '微軟正黑體', sans-serif;
+    background: var(--darker);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+
+  #app {
+    width: 100%;
+    max-width: 600px;
+  }
+
+  /* ── SCREEN BASE ── */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* ── INTRO ── */
+  .intro-header {
+    text-align: center;
+    padding: 32px 0 24px;
+  }
+  .series-badge {
+    display: inline-block;
+    background: var(--border);
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 2px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .intro-title {
+    font-size: clamp(2.2rem, 8vw, 3.2rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  .intro-title .green { color: var(--green); }
+  .intro-title .blue { color: #60a5fa; }
+  .intro-sub {
+    font-size: 0.95rem;
+    color: var(--muted);
+    margin-bottom: 28px;
+    line-height: 1.6;
+  }
+
+  .stance-reveal {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+  .stance-reveal h3 {
+    font-size: 0.85rem;
+    color: var(--muted);
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+  }
+  .assigned-stance {
+    font-size: 1.8rem;
+    font-weight: 900;
+    padding: 12px 24px;
+    border-radius: 12px;
+    display: inline-block;
+    margin-bottom: 12px;
+  }
+  .assigned-stance.green-stance {
+    background: rgba(22,163,74,0.2);
+    color: var(--green);
+    border: 2px solid var(--green);
+  }
+  .assigned-stance.blue-stance {
+    background: rgba(29,78,216,0.2);
+    color: #60a5fa;
+    border: 2px solid #60a5fa;
+  }
+  .assigned-stance.eco-stance {
+    background: rgba(6,182,212,0.2);
+    color: #22d3ee;
+    border: 2px solid #22d3ee;
+  }
+  .assigned-stance.pragmatic-stance {
+    background: rgba(202,138,4,0.2);
+    color: #fbbf24;
+    border: 2px solid #fbbf24;
+  }
+  .assigned-stance.partisan-stance {
+    background: rgba(168,85,247,0.2);
+    color: #c084fc;
+    border: 2px solid #c084fc;
+  }
+  .assigned-stance.engineer-stance {
+    background: rgba(99,102,241,0.2);
+    color: #a5b4fc;
+    border: 2px solid #a5b4fc;
+  }
+  .assigned-stance.media-stance {
+    background: rgba(236,72,153,0.2);
+    color: #f9a8d4;
+    border: 2px solid #f9a8d4;
+  }
+  .assigned-stance.exhausted-stance {
+    background: rgba(100,116,139,0.2);
+    color: #94a3b8;
+    border: 2px solid #94a3b8;
+  }
+  .stance-desc {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .context-box {
+    background: rgba(202,138,4,0.1);
+    border-left: 3px solid var(--yellow);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 16px;
+    margin-bottom: 24px;
+    font-size: 0.88rem;
+    color: #fde68a;
+    line-height: 1.6;
+  }
+
+  /* ── BUTTONS ── */
+  .btn {
+    width: 100%;
+    padding: 16px;
+    border-radius: 12px;
+    border: none;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: inherit;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--green), #15803d);
+    color: white;
+  }
+  .btn-primary.blue-mode {
+    background: linear-gradient(135deg, var(--blue), #1e40af);
+  }
+  .btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+  .btn:active { transform: translateY(0); }
+
+  /* ── PROGRESS ── */
+  .progress-bar {
+    background: var(--border);
+    border-radius: 99px;
+    height: 4px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--green), #60a5fa);
+    border-radius: 99px;
+    transition: width 0.4s ease;
+  }
+  .round-label {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-bottom: 4px;
+    letter-spacing: 1px;
+  }
+
+  /* ── QUESTION ── */
+  .question-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .question-context {
+    font-size: 0.82rem;
+    color: var(--muted);
+    background: var(--darker);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 14px;
+    line-height: 1.6;
+    border-left: 3px solid var(--border);
+  }
+  .question-text {
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.5;
+    margin-bottom: 6px;
+  }
+  /* ── GLOSSARY TOOLTIPS ── */
+  .tip {
+    border-bottom: 1px dashed var(--muted);
+    cursor: help;
+    position: relative;
+    white-space: nowrap;
+  }
+  .tip::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1e293b;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 7px 12px;
+    font-size: 0.74rem;
+    font-weight: 400;
+    line-height: 1.5;
+    white-space: normal;
+    min-width: 180px;
+    max-width: 240px;
+    text-align: left;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.18s;
+    z-index: 99;
+  }
+  .tip:hover::after { opacity: 1; }
+
+  /* ── PLAYER IDENTITY CARD ── */
+  .player-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--border);
+    background: rgba(255,255,255,0.03);
+    margin-bottom: 12px;
+    transition: border-color 0.4s ease, background 0.4s ease;
+  }
+  .player-card-emoji { font-size: 2rem; line-height: 1; flex-shrink: 0; }
+  .player-card-info  { display: flex; flex-direction: column; gap: 2px; }
+  .player-card-you   { font-size: 0.65rem; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; }
+  .player-card-name  { font-size: 0.98rem; font-weight: 800; line-height: 1.2; }
+  .player-card-tend  { font-size: 0.72rem; color: var(--muted); }
+  .stance-tag.green { background: rgba(22,163,74,0.2); color: var(--green); }
+  .stance-tag.blue { background: rgba(29,78,216,0.2); color: #60a5fa; }
+  .stance-tag.eco { background: rgba(6,182,212,0.2); color: #22d3ee; }
+  .stance-tag.pragmatic { background: rgba(202,138,4,0.2); color: #fbbf24; }
+  .stance-tag.partisan { background: rgba(168,85,247,0.2); color: #c084fc; }
+  .stance-tag.engineer { background: rgba(99,102,241,0.2); color: #a5b4fc; }
+  .stance-tag.media { background: rgba(236,72,153,0.2); color: #f9a8d4; }
+  .stance-tag.exhausted { background: rgba(100,116,139,0.2); color: #94a3b8; }
+
+  /* ── CHOICES ── */
+  .choices { display: flex; flex-direction: column; gap: 10px; }
+  .choice-btn {
+    background: var(--darker);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    position: relative;
+    padding-left: 20px;
+    padding: 14px 16px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: inherit;
+    color: var(--text);
+    width: 100%;
+  }
+  /* emotion left bar */
+  .choice-btn::before {
+    content: '';
+    position: absolute; left: 0; top: 8px; bottom: 8px;
+    width: 4px; border-radius: 4px;
+    transition: background 0.15s;
+  }
+  .choice-btn.emotion-rage   { border-color: rgba(220,38,38,0.35); }
+  .choice-btn.emotion-reason { border-color: rgba(96,165,250,0.35); }
+  .choice-btn.emotion-influence { border-color: rgba(202,138,4,0.35); }
+  .choice-btn.emotion-neutral { border-color: rgba(148,163,184,0.25); }
+  .choice-btn.emotion-rage::before   { background: rgba(220,38,38,0.55); }
+  .choice-btn.emotion-reason::before { background: rgba(96,165,250,0.55); }
+  .choice-btn.emotion-influence::before { background: rgba(202,138,4,0.55); }
+  .choice-btn.emotion-neutral::before { background: rgba(148,163,184,0.3); }
+
+  .choice-btn.emotion-rage:hover   { border-color: var(--red); background: rgba(220,38,38,0.07); transform: translateX(4px); }
+  .choice-btn.emotion-reason:hover { border-color: #60a5fa; background: rgba(96,165,250,0.07); transform: translateX(4px); }
+  .choice-btn.emotion-influence:hover { border-color: var(--yellow); background: rgba(202,138,4,0.07); transform: translateX(4px); }
+  .choice-btn.emotion-neutral:hover { border-color: #94a3b8; background: rgba(148,163,184,0.05); transform: translateX(4px); }
+  .choice-btn.emotion-rage:hover::before   { background: var(--red); }
+  .choice-btn.emotion-reason:hover::before { background: #60a5fa; }
+  .choice-btn.emotion-influence:hover::before { background: var(--yellow); }
+  .choice-btn.emotion-neutral:hover::before { background: #94a3b8; }
+
+  .choice-btn.selected-green   { border-color: var(--green); background: rgba(22,163,74,0.1); }
+  .choice-btn.selected-blue    { border-color: #60a5fa; background: rgba(96,165,250,0.1); }
+  .choice-btn.selected-neutral { border-color: var(--yellow); background: rgba(202,138,4,0.1); }
+  .choice-btn.disabled { opacity: 0.5; cursor: default; pointer-events: none; }
+  .choice-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+  }
+  .choice-text { font-size: 0.92rem; line-height: 1.5; }
+  .choice-effect {
+    margin-top: 8px;
+    font-size: 0.75rem;
+    color: var(--muted);
+    display: none;
+  }
+  .choice-btn.revealed .choice-effect { display: block; }
+
+  /* ── STATS ── */
+  .stats-bar {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+  }
+  .stats-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .stat-item { display: flex; flex-direction: column; gap: 4px; }
+  .stat-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+  }
+  .stat-name { color: var(--muted); }
+  .stat-value { font-weight: 700; }
+  .stat-track {
+    height: 5px;
+    background: var(--border);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .stat-fill {
+    height: 100%;
+    border-radius: 99px;
+    transition: width 0.5s ease;
+  }
+  @keyframes statPulse { 0%{opacity:1} 30%{opacity:0.35} 70%{opacity:1} 100%{opacity:1} }
+  .stat-fill.flash { animation: statPulse 0.45s ease; }
+  .stat-fill.rage { background: var(--red); }
+  .stat-fill.reason { background: #60a5fa; }
+  .stat-fill.influence { background: var(--yellow); }
+  .stat-fill.cred { background: var(--green); }
+
+  /* ── STAT CHANGE ANIMATIONS ── */
+  @keyframes valBump { 0%{transform:scale(1)} 35%{transform:scale(1.35)} 100%{transform:scale(1)} }
+  @keyframes deltaFloat { 0%{opacity:1;transform:translateY(0)} 30%{opacity:1} 100%{opacity:0;transform:translateY(-14px)} }
+  .stat-header { position: relative; }
+  .stat-value.bumping { animation: valBump 0.35s ease; }
+  .delta-badge {
+    position: absolute; right: 0; top: -13px;
+    font-size: 0.68rem; font-weight: 800; line-height: 1;
+    animation: deltaFloat 0.75s ease forwards;
+    pointer-events: none;
+  }
+
+  /* ── FEEDBACK ── */
+  .feedback-box {
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-top: 10px;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: #cbd5e1;
+    display: none;
+  }
+  .feedback-box.show { display: block; }
+
+  .next-btn {
+    margin-top: 14px;
+    background: var(--border);
+    color: var(--text);
+    border: none;
+    border-radius: 12px;
+    padding: 14px;
+    width: 100%;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    display: none;
+    transition: all 0.15s;
+  }
+  .next-btn.show { display: block; }
+  .next-btn:hover { background: #475569; }
+
+  /* ── RESULT ── */
+  .result-header {
+    text-align: center;
+    padding: 28px 0 20px;
+  }
+  .result-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    background: var(--border);
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .archetype-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px 24px;
+    text-align: center;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .archetype-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .archetype-card.type-rage::before { background: var(--red); }
+  .archetype-card.type-reason::before { background: #60a5fa; }
+  .archetype-card.type-influence::before { background: var(--yellow); }
+  .archetype-card.type-cred::before { background: var(--green); }
+  .archetype-card.type-mixed::before { background: linear-gradient(90deg, var(--green), #60a5fa); }
+  .archetype-card.type-silent::before { background: var(--gray); }
+
+  .archetype-emoji { font-size: 3.5rem; margin-bottom: 12px; }
+  .archetype-title {
+    font-size: 1.8rem;
+    font-weight: 900;
+    margin-bottom: 8px;
+  }
+  .archetype-desc {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+
+  /* ── TWIST ── */
+  .twist-box {
+    background: var(--darker);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    border: 1px dashed var(--border);
+  }
+  .twist-title {
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    color: var(--yellow);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .twist-comparison {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 8px;
+    align-items: center;
+    text-align: center;
+  }
+  .twist-item label {
+    display: block;
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .twist-item .value {
+    font-size: 1rem;
+    font-weight: 900;
+    padding: 6px 10px;
+    border-radius: 8px;
+  }
+  .twist-item .value.green { background: rgba(22,163,74,0.2); color: var(--green); }
+  .twist-item .value.blue { background: rgba(29,78,216,0.2); color: #60a5fa; }
+  .twist-item .value.neutral { background: rgba(107,114,128,0.2); color: var(--gray); }
+  .twist-arrow { font-size: 1.2rem; color: var(--muted); }
+  .twist-verdict {
+    margin-top: 12px;
+    font-size: 0.88rem;
+    text-align: center;
+    line-height: 1.6;
+    padding: 10px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.03);
+  }
+  .twist-verdict.match { color: var(--green); }
+  .twist-verdict.diff { color: var(--yellow); }
+
+  /* ── STATS RESULT ── */
+  .result-stats {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  .result-stats h4 {
+    font-size: 0.78rem;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 14px;
+    text-transform: uppercase;
+  }
+  .result-stat-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .result-stat-name {
+    font-size: 0.82rem;
+    width: 60px;
+    color: var(--muted);
+  }
+  .result-stat-bar {
+    flex: 1;
+    height: 8px;
+    background: var(--border);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .result-stat-fill {
+    height: 100%;
+    border-radius: 99px;
+    transition: width 1s ease;
+  }
+  .result-stat-fill.rage { background: var(--red); }
+  .result-stat-fill.reason { background: #60a5fa; }
+  .result-stat-fill.influence { background: var(--yellow); }
+  .result-stat-fill.cred { background: var(--green); }
+  .result-stat-num {
+    font-size: 0.82rem;
+    font-weight: 700;
+    width: 28px;
+    text-align: right;
+  }
+
+  /* ── SHARE ── */
+  .share-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  .share-section h4 {
+    font-size: 0.78rem;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .share-text {
+    background: var(--darker);
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: #cbd5e1;
+    margin-bottom: 12px;
+    border: 1px solid var(--border);
+  }
+  .share-buttons { display: flex; gap: 8px; }
+  .share-btn {
+    flex: 1;
+    padding: 12px 8px;
+    border-radius: 10px;
+    border: none;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+  .share-btn.copy { background: var(--border); color: var(--text); }
+  .share-btn.copy:hover { background: #475569; }
+  .share-btn.fb { background: #1877f2; color: white; }
+  .share-btn.fb:hover { background: #1558b0; }
+  .share-btn.line { background: #06c755; color: white; }
+  .share-btn.line:hover { background: #05a848; }
+
+  .retry-btn {
+    background: transparent;
+    border: 1.5px solid var(--border);
+    color: var(--muted);
+    border-radius: 12px;
+    padding: 12px;
+    width: 100%;
+    font-size: 0.9rem;
+    cursor: pointer;
+    font-family: inherit;
+    margin-bottom: 12px;
+    transition: all 0.15s;
+  }
+  .retry-btn:hover { border-color: var(--text); color: var(--text); }
+
+  /* ── FOOTER ── */
+  .game-footer {
+    text-align: center;
+    padding: 20px 0 8px;
+    font-size: 0.72rem;
+    color: #475569;
+    line-height: 1.8;
+  }
+  .ep-nav {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .ep-link {
+    flex: 1;
+    padding: 10px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--muted);
+    text-decoration: none;
+    transition: all 0.15s;
+  }
+  .ep-link:hover { border-color: #60a5fa; color: var(--text); }
+  .ep-link.current { border-color: var(--green); color: var(--green); font-weight: 600; }
+  .ep-link.coming-soon {
+    opacity: 0.38;
+    border-style: dashed;
+    cursor: default;
+    pointer-events: none;
+    font-style: italic;
+    letter-spacing: 0.01em;
+  }
+
+  /* ── FB POST ── */
+  .fb-post {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px 12px 0 0;
+    overflow: hidden;
+  }
+  .fb-post-header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 14px 8px;
+  }
+  .fb-poster-avatar {
+    width: 40px; height: 40px;
+    background: rgba(255,255,255,0.07);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.35rem; flex-shrink: 0;
+  }
+  .fb-poster-name { font-size: 0.9rem; font-weight: 800; line-height: 1.3; }
+  .fb-poster-time { font-size: 0.7rem; color: var(--muted); margin-top: 1px; }
+  .fb-post-body {
+    padding: 2px 14px 12px;
+    font-size: 0.88rem; line-height: 1.72; color: var(--text);
+  }
+  .fb-engage-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 5px 14px;
+    font-size: 0.75rem; color: var(--muted);
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  @keyframes engageBump {
+    0%   { transform: scale(1);    color: var(--muted); }
+    30%  { transform: scale(1.28); color: #f1f5f9; }
+    100% { transform: scale(1);    color: var(--muted); }
+  }
+  .engage-bump { display: inline-block; animation: engageBump 0.45s ease; }
+  .fb-action-row {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .fb-action-btn {
+    padding: 7px 4px; text-align: center;
+    font-size: 0.8rem; color: var(--muted); font-weight: 600;
+  }
+
+  /* ── COMMENT SECTION ── */
+  .comment-section {
+    background: var(--card);
+    border: 1px solid var(--border); border-top: none;
+    border-radius: 0 0 12px 12px;
+    padding: 12px 14px 16px;
+    margin-bottom: 0;
+  }
+  .comment-prompt-row {
+    display: flex; align-items: flex-start; gap: 9px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    margin-bottom: 12px;
+  }
+  .comment-your-avatar {
+    width: 30px; height: 30px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem; flex-shrink: 0; margin-top: 1px;
+  }
+  .comment-prompt-text {
+    flex: 1; font-size: 0.9rem; font-weight: 700;
+    line-height: 1.4; color: var(--text); padding-top: 4px;
+  }
+  .comment-list { display: flex; flex-direction: column; gap: 8px; }
+
+  /* ── COMMENT CHOICES ── */
+  .comment-choice {
+    display: flex; gap: 8px;
+    cursor: pointer; border-radius: 10px;
+    padding: 4px 4px; transition: background 0.12s;
+  }
+  .comment-choice:hover { background: rgba(255,255,255,0.03); }
+  .comment-choice-avatar {
+    width: 30px; height: 30px;
+    background: rgba(255,255,255,0.07);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem; flex-shrink: 0; margin-top: 2px;
+  }
+  .comment-choice-body { flex: 1; min-width: 0; }
+  .comment-bubble {
+    background: var(--darker);
+    border-radius: 14px; padding: 8px 12px; margin-bottom: 3px;
+    border: 1.5px solid transparent;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .comment-bubble-name {
+    font-size: 0.72rem; font-weight: 800; margin-bottom: 3px;
+    color: var(--muted); letter-spacing: 0.3px;
+  }
+  .comment-bubble-text { font-size: 0.88rem; line-height: 1.55; }
+  .comment-meta { font-size: 0.68rem; color: var(--muted); padding: 0 2px; font-weight: 600; }
+  .comment-effect { font-size: 0.68rem; color: var(--muted); padding: 2px 2px 0; display: none; }
+  .comment-choice.revealed .comment-effect { display: block; }
+  /* Emotion: 左側色條 + 背景微染 + 邊框 */
+  .comment-bubble { border-left-width: 3px; }
+
+  .comment-choice.emotion-rage .comment-bubble {
+    border-color: rgba(220,38,38,0.5); border-left-color: #dc2626;
+    background: rgba(220,38,38,0.07);
+  }
+  .comment-choice.emotion-rage .comment-bubble-name { color: #fca5a5; }
+  .comment-choice.emotion-rage .comment-choice-avatar { background: rgba(220,38,38,0.2); }
+
+  .comment-choice.emotion-reason .comment-bubble {
+    border-color: rgba(96,165,250,0.45); border-left-color: #60a5fa;
+    background: rgba(96,165,250,0.07);
+  }
+  .comment-choice.emotion-reason .comment-bubble-name { color: #93c5fd; }
+  .comment-choice.emotion-reason .comment-choice-avatar { background: rgba(96,165,250,0.2); }
+
+  .comment-choice.emotion-influence .comment-bubble {
+    border-color: rgba(202,138,4,0.45); border-left-color: #d97706;
+    background: rgba(202,138,4,0.07);
+  }
+  .comment-choice.emotion-influence .comment-bubble-name { color: #fcd34d; }
+  .comment-choice.emotion-influence .comment-choice-avatar { background: rgba(202,138,4,0.2); }
+
+  .comment-choice.emotion-neutral .comment-bubble {
+    border-color: rgba(148,163,184,0.3); border-left-color: #64748b;
+    background: rgba(148,163,184,0.04);
+  }
+  .comment-choice.emotion-neutral .comment-bubble-name { color: #94a3b8; }
+
+  .comment-choice.emotion-rage:hover .comment-bubble      { border-color: rgba(220,38,38,0.8);  background: rgba(220,38,38,0.12); }
+  .comment-choice.emotion-reason:hover .comment-bubble    { border-color: rgba(96,165,250,0.8);  background: rgba(96,165,250,0.12); }
+  .comment-choice.emotion-influence:hover .comment-bubble { border-color: rgba(202,138,4,0.8);   background: rgba(202,138,4,0.12); }
+  .comment-choice.emotion-neutral:hover .comment-bubble   { border-color: rgba(148,163,184,0.55); background: rgba(148,163,184,0.07); }
+
+  .comment-choice.disabled { opacity: 0.5; pointer-events: none; }
+  .comment-choice.selected .comment-bubble { background: rgba(34,197,94,0.1); border-color: rgba(34,197,94,0.6); border-left-color: #22c55e; }
+  .comment-choice.selected .comment-bubble-name { color: #4ade80; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .screen.active { animation: fadeIn 0.3s ease; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+  .loading { animation: pulse 1.5s infinite; }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- INTRO SCREEN -->
+  <div id="screen-intro" class="screen active">
+    <div class="intro-header">
+      <div class="series-badge">鬼島鄉民測驗 · 核電篇 EP.1</div>
+      <div class="intro-title">
+        臉腫了嗎？
+      </div>
+      <div class="intro-sub">
+        總統宣布重啟核電，615則留言炸鍋。<br>
+        系統隨機分配你的立場——<br>
+        你的直覺和你的「人設」一樣嗎？
+      </div>
+    </div>
+
+    <div class="stance-reveal" id="stance-preview">
+      <h3>系統分配你的立場</h3>
+      <div class="assigned-stance loading" id="stance-display">???</div>
+      <div class="stance-desc" id="stance-description">正在隨機分配中……</div>
+      <div id="reroll-area" style="margin-top:14px;"></div>
+    </div>
+
+    <div class="context-box">
+      📰 <strong>事件背景</strong>：2025年3月，現任總統宣布將評估重啟核二、核三（打破執政黨長達20年的非核家園政策）。
+      貼文下方，<strong>615則留言</strong>，多種聲音同時存在。
+    </div>
+
+    <button class="btn btn-primary" id="start-btn" onclick="startGame()">
+      接受立場，開始測驗 →
+    </button>
+
+    <div class="game-footer">
+      共 5 關 · 約 3 分鐘<br>
+      <div class="ep-nav">
+        <a class="ep-link current" href="#">▶ EP.1 臉腫了嗎？</a>
+        <span class="ep-link coming-soon">EP.2 留言區風暴 🔒</span>
+        <span class="ep-link coming-soon">EP.3 核廢料放你家 🔒</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAME SCREEN -->
+  <div id="screen-game" class="screen">
+    <div class="round-label" id="round-label">第 1 關 / 5</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill" style="width:20%"></div>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stats-row">
+        <div class="stat-item">
+          <div class="stat-header">
+            <span class="stat-name">怒氣</span>
+            <span class="stat-value" id="stat-rage">0</span>
+          </div>
+          <div class="stat-track"><div class="stat-fill rage" id="fill-rage" style="width:0%"></div></div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-header">
+            <span class="stat-name">理性</span>
+            <span class="stat-value" id="stat-reason">0</span>
+          </div>
+          <div class="stat-track"><div class="stat-fill reason" id="fill-reason" style="width:0%"></div></div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-header">
+            <span class="stat-name">影響力</span>
+            <span class="stat-value" id="stat-influence">0</span>
+          </div>
+          <div class="stat-track"><div class="stat-fill influence" id="fill-influence" style="width:0%"></div></div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-header">
+            <span class="stat-name">公信力</span>
+            <span class="stat-value" id="stat-cred">0</span>
+          </div>
+          <div class="stat-track"><div class="stat-fill cred" id="fill-cred" style="width:0%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 角色識別卡 -->
+    <div class="player-card" id="player-card"></div>
+
+    <!-- FB-style post -->
+    <div class="fb-post">
+      <div class="fb-post-header">
+        <div class="fb-poster-avatar" id="fb-poster-avatar">📰</div>
+        <div>
+          <div class="fb-poster-name" id="fb-poster-name">時事熱議</div>
+          <div class="fb-poster-time" id="fb-poster-time">3小時前 · 🌐</div>
+        </div>
+      </div>
+      <div class="fb-post-body" id="q-context"></div>
+      <div class="fb-engage-row">
+        <span>👍 ❤️ 😮 <span id="fb-likes">231</span></span>
+        <span><span id="fb-comments">615</span> 則留言</span>
+      </div>
+      <div class="fb-action-row">
+        <div class="fb-action-btn">👍 讚</div>
+        <div class="fb-action-btn">💬 留言</div>
+        <div class="fb-action-btn">↗ 分享</div>
+      </div>
+    </div>
+
+    <!-- Comment section -->
+    <div class="comment-section">
+      <div class="comment-prompt-row">
+        <div class="comment-your-avatar" id="comment-your-avatar">😐</div>
+        <div class="comment-prompt-text" id="q-text">你要怎麼回應？</div>
+      </div>
+      <div class="comment-list" id="choices-container"></div>
+      <div class="feedback-box" id="feedback-box"></div>
+      <button class="next-btn" id="next-btn" onclick="nextRound()">繼續 →</button>
+    </div>
+  </div>
+
+  <!-- RESULT SCREEN -->
+  <div id="screen-result" class="screen">
+    <div class="result-header">
+      <div class="result-badge">測驗結果</div>
+    </div>
+
+    <div class="archetype-card" id="archetype-card">
+      <div class="archetype-emoji" id="result-emoji"></div>
+      <div class="archetype-title" id="result-title"></div>
+      <div class="archetype-desc" id="result-desc"></div>
+    </div>
+
+    <div class="twist-box">
+      <div class="twist-title">⚡ 換位體驗結果</div>
+      <div class="twist-comparison">
+        <div class="twist-item">
+          <label>系統分配</label>
+          <div class="value" id="twist-assigned"></div>
+        </div>
+        <div class="twist-arrow">→</div>
+        <div class="twist-item">
+          <label>你的真實選擇傾向</label>
+          <div class="value" id="twist-actual"></div>
+        </div>
+      </div>
+      <div class="twist-verdict" id="twist-verdict"></div>
+    </div>
+
+    <div class="result-stats">
+      <h4>你的鬼島數值</h4>
+      <div class="result-stat-item">
+        <span class="result-stat-name">怒氣</span>
+        <div class="result-stat-bar"><div class="result-stat-fill rage" id="r-rage" style="width:0%"></div></div>
+        <span class="result-stat-num" id="rn-rage">0</span>
+      </div>
+      <div class="result-stat-item">
+        <span class="result-stat-name">理性</span>
+        <div class="result-stat-bar"><div class="result-stat-fill reason" id="r-reason" style="width:0%"></div></div>
+        <span class="result-stat-num" id="rn-reason">0</span>
+      </div>
+      <div class="result-stat-item">
+        <span class="result-stat-name">影響力</span>
+        <div class="result-stat-bar"><div class="result-stat-fill influence" id="r-influence" style="width:0%"></div></div>
+        <span class="result-stat-num" id="rn-influence">0</span>
+      </div>
+      <div class="result-stat-item">
+        <span class="result-stat-name">公信力</span>
+        <div class="result-stat-bar"><div class="result-stat-fill cred" id="r-cred" style="width:0%"></div></div>
+        <span class="result-stat-num" id="rn-cred">0</span>
+      </div>
+    </div>
+
+    <div class="share-section">
+      <h4>曬出你的結果</h4>
+      <div class="share-text" id="share-text"></div>
+      <div class="share-buttons">
+        <button class="share-btn fb" onclick="shareFB()">分享 FB</button>
+        <button class="share-btn line" onclick="shareLINE()">分享 LINE</button>
+      </div>
+    </div>
+
+    <button class="retry-btn" onclick="retry()">↺ 重玩遊戲（換個立場）</button>
+
+    <div class="game-footer">
+      府城數位人文實驗室
+      <div class="ep-nav">
+        <a class="ep-link current" href="#">▶ EP.1 臉腫了嗎？</a>
+        <span class="ep-link coming-soon">EP.2 留言區風暴 🔒</span>
+        <span class="ep-link coming-soon">EP.3 核廢料放你家 🔒</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── STATE ──
+let assignedStance = '';
+let currentRound = 0;
+let stats = { rage: 0, reason: 0, influence: 0, cred: 0 };
+let naturalTendency = '';
+let activeQuestions = [];  // selected + shuffled subset of QUESTION_POOL
+let questionPool   = [];  // remaining question indices (pool, no-repeat across games)
+
+// ── QUESTION POOL (10 題，每局隨機取 5，順序打亂) ──
+const QUESTION_POOL = [
+  {
+    context: '📰 3月22日，總統在記者會上說：「重啟核二、核三是基於能源安全考量，不是政治問題。」',
+    text: '你的時間軸炸鍋了。你的第一個念頭是什麼？',
+    rolePrompts: {
+      green: '你的黨做了這件事。時間軸炸鍋了。你的第一個念頭是什麼？',
+      blue: '你等這天等很久了。時間軸炸鍋了。你的第一個念頭是什麼？',
+      eco: '廢料問題還沒解決就要重啟。時間軸炸鍋了。你的第一個念頭是什麼？',
+      pragmatic: '這會讓電費降嗎？時間軸炸鍋了。你的第一個念頭是什麼？',
+      partisan: '這是你陣營反對的政策——但現在換成執政黨在推。你的第一個念頭是什麼？',
+      engineer: '你知道技術細節，但沒人問你。時間軸炸鍋了。你的第一個念頭是什麼？',
+      media: '職業本能讓你第一秒就在想「這怎麼報」。時間軸炸鍋了，你的第一個念頭是什麼？',
+      exhausted: '又來了。時間軸炸鍋了。你的第一個念頭是什麼？',
+    },
+    choices: [
+      {
+        label: '火爆反應',
+        text: '「又在說謊！當年非核家園喊這麼大聲，現在說不是政治問題？臉腫不腫？」',
+        effects: { rage: +25, reason: -5, influence: +10, cred: -10 },
+        tendency: 'blue',
+        feedback: '這是真實留言的主流反應。「臉腫」成為這兩天的關鍵詞，出現頻率超過20次。'
+      },
+      {
+        label: '理性分析',
+        text: '「能源政策本來就該隨環境調整。重點是安全評估和核廢料處理方案有沒有到位。」',
+        effects: { rage: -5, reason: +25, influence: +5, cred: +15 },
+        tendency: 'neutral',
+        feedback: '留言區裡這類聲音大約佔20%，通常會被兩邊攻擊：「你在洗地」或「你根本不懂核電」。'
+      },
+      {
+        label: '沉默觀望',
+        text: '滑過去，先看看風向再說。',
+        effects: { rage: 0, reason: +5, influence: -5, cred: +10 },
+        tendency: 'neutral',
+        feedback: '留言區的沉默多數。615則留言背後，有更多人只是滑過去。'
+      },
+      {
+        label: '支持立場',
+        text: '「終於！台積電用電這麼兇，不核電用什麼？這才是務實的能源政策。」',
+        effects: { rage: +5, reason: +10, influence: +15, cred: -5 },
+        tendency: 'blue',
+        feedback: '支持重啟核電的聲音以能源安全和台積電用電為主要論點，在這篇貼文相對強勢。'
+      }
+    ]
+  },
+  {
+    context: '💬 有人翻出2021年的舊貼文截圖，上面寫著「我是人，我反核」，配上現在的新聞，問：「現在呢？」',
+    text: '這張截圖被瘋狂轉貼。你會怎麼處理？',
+    rolePrompts: {
+      green: '這張截圖在嘲諷你曾經一起走過的人。你會怎麼處理？',
+      blue: '這就是你等的那張截圖。現在你怎麼辦？',
+      partisan: '你一直用的「反核是進步立場」這個框架，現在有點說不清楚了。你會怎麼處理？',
+      media: '你知道這張截圖的傳播邏輯。但你也有自己的感受。你會怎麼處理？',
+    },
+    choices: [
+      {
+        label: '幸災樂禍',
+        text: '「哈哈哈哈哈哈哈讚讚讚。青鳥們不出來了嗎？不是要絕食嗎？」',
+        effects: { rage: +20, reason: -10, influence: +20, cred: -15 },
+        tendency: 'blue',
+        feedback: '反諷前後矛盾是這次貼文最大的留言主軸。Dcard「我是人我反核」截圖的迷因被廣泛流傳。'
+      },
+      {
+        label: '護航解釋',
+        text: '「政策本來就要因時制宜，現在國際情勢不同了，能源安全考量比較重要。」',
+        effects: { rage: +5, reason: +15, influence: -5, cred: +5 },
+        tendency: 'green',
+        feedback: '被留言區稱為「洗地」。這類回應幾乎都被圍攻，但也有人認真回應說：政策調整本身無可厚非。'
+      },
+      {
+        label: '自我矛盾',
+        text: '「……我也覺得以前那樣說有點過了。但核廢料問題真的還沒解決啊。」',
+        effects: { rage: -10, reason: +20, influence: -10, cred: +20 },
+        tendency: 'neutral',
+        feedback: '這是最少見的回應，也是最難被演算法推廣的：承認矛盾，但保持思考。'
+      },
+      {
+        label: '反將一軍',
+        text: '「核一核二核四是藍的停的，核三是綠的停的。都有份，別假裝你沒責任。」',
+        effects: { rage: +15, reason: +10, influence: +10, cred: 0 },
+        tendency: 'neutral',
+        feedback: '事實上是正確的。但在留言戰中，「正確但掃興」的回應往往被兩邊忽略。'
+      }
+    ]
+  },
+  {
+    context: '🏝️ 南部網友留言：「核三在屏東，你們北部人支持重啟，廢料你們要嗎？」這條留言按了64讚。',
+    text: '你如何回應這個「南北矛盾」？',
+    rolePrompts: {
+      eco: '「核廢料放哪裡」正是你一直在問的問題。你如何回應這個「南北矛盾」？',
+      engineer: '你知道NIMBY問題在技術上有方案，在政治上很難。你如何回應這個「南北矛盾」？',
+      pragmatic: '屏東的事離你很遠，但電費離你很近。你如何回應這個「南北矛盾」？',
+    },
+    choices: [
+      {
+        label: '怒轟地域牌',
+        text: '「又在打地域牌！全島一起用電，為什麼核電廠只能在南邊？不公平。」',
+        effects: { rage: +20, reason: -5, influence: +15, cred: -10 },
+        tendency: 'blue',
+        feedback: '這條回覆串觸發了真實的南北對立討論。核三的地理位置確實是政治敏感點。'
+      },
+      {
+        label: '同理南部',
+        text: '「這是合理的NIMBY問題。沒有人願意廢料放家門口，這不是地域主義，是基本的環境正義。」',
+        effects: { rage: -5, reason: +20, influence: +5, cred: +15 },
+        tendency: 'neutral',
+        feedback: '「核廢料放哪裡」是跨陣營最無法忽視的共同焦慮。甚至支持核電的人也承認這點。'
+      },
+      {
+        label: '技術性解決',
+        text: '「核廢料是全球性問題，芬蘭已有地質儲存庫Onkalo，島上可以參考。不是沒有解法。」',
+        effects: { rage: -10, reason: +25, influence: 0, cred: +20 },
+        tendency: 'neutral',
+        feedback: '技術派的回答。在留言區往往被「島上跟芬蘭不一樣」回擊，但這是事實資訊。'
+      },
+      {
+        label: '轉移話題',
+        text: '「核廢料問題重要，但停電也是問題。你要廢料還是要停電？」',
+        effects: { rage: +10, reason: +5, influence: +15, cred: -10 },
+        tendency: 'blue',
+        feedback: '典型的「二擇一框架」，在留言戰中效果很好，但簡化了問題。'
+      }
+    ]
+  },
+  {
+    context: '🔴 貼文下有一則已被隱藏的留言，點開後看到：「你終於知道自己只是執政黨的衛生棉，用完即丟」（67讚）',
+    text: '你看到這則留言，你的反應是？',
+    choices: [
+      {
+        label: '哈哈按讚',
+        text: '「這比喻絕了哈哈哈哈，雖然很粗魯但是說中了。」',
+        effects: { rage: +15, reason: -15, influence: +25, cred: -20 },
+        tendency: 'blue',
+        feedback: '這則留言獲得67讚，但因用語被作者隱藏。高按讚但被隱藏——這就是社群演算法與人工審核的矛盾。'
+      },
+      {
+        label: '反感檢舉',
+        text: '「這種人身攻擊有什麼意義？就算你的立場對，這樣說話只會讓人更不想聽。」',
+        effects: { rage: -5, reason: +15, influence: -10, cred: +25 },
+        tendency: 'green',
+        feedback: '現實中選擇這個立場的人很少公開說，但「被隱藏的留言往往讚數最高」是社群真實現象。'
+      },
+      {
+        label: '略過不理',
+        text: '這種留言看看就好，捲動繼續往下。',
+        effects: { rage: 0, reason: 0, influence: -5, cred: +10 },
+        tendency: 'neutral',
+        feedback: '大多數人的選擇。但「略過」也是一種態度——平台演算法卻可能繼續推送。'
+      },
+      {
+        label: '覺得說中',
+        text: '「……雖然措辭很難聽，但我現在確實有這種失落感。被政黨利用完了。」',
+        effects: { rage: +5, reason: +20, influence: -15, cred: +15 },
+        tendency: 'green',
+        feedback: '這是最少見但最深刻的反應。貼文作者本人的情緒接近這個。「失望」才是這篇貼文的真正情緒核心。'
+      }
+    ]
+  },
+  {
+    context: '🏁 最後一關。72小時後，這則貼文的留言戰逐漸沉寂。你在回顧這場討論，想說一句話結尾。',
+    text: '整個討論之後，你覺得…',
+    choices: [
+      {
+        label: '我贏了',
+        text: '「反核的人臉都腫了，這次我方大獲全勝。歷史證明了我是對的。」',
+        effects: { rage: +20, reason: -20, influence: +15, cred: -25 },
+        tendency: 'blue',
+        feedback: '「贏了」的感覺很爽，但核廢料問題沒有解決，核電廠安全問題沒有解決。下一個新聞週期來了。'
+      },
+      {
+        label: '好累好煩',
+        text: '「大家好累！重來重去，當初何必停建！希望這次真的能做好能源規劃。」',
+        effects: { rage: +5, reason: +10, influence: 0, cred: +5 },
+        tendency: 'neutral',
+        feedback: '「大家好累！好煩！好無奈！」——這是留言區裡中間選民最真實的聲音。'
+      },
+      {
+        label: '還是有疑慮',
+        text: '「我可以接受核電重啟，但三個前提（核安、核廢、民意）一個都沒解決。這不是終點。」',
+        effects: { rage: -10, reason: +25, influence: +5, cred: +20 },
+        tendency: 'neutral',
+        feedback: '這是留言區「澄清圖」的核心訊息：不是說核電馬上重啟，是說三個前提還沒到。'
+      },
+      {
+        label: '誰管那麼多',
+        text: '「反正誰上台都一樣，我只管我的薪水夠不夠繳電費。」',
+        effects: { rage: 0, reason: 0, influence: -20, cred: 0 },
+        tendency: 'neutral',
+        feedback: '政治疲勞是真實的。但「誰管那麼多」也是一種選擇——讓別人代替你決定。'
+      }
+    ]
+  },
+  // ── 以下為擴充題庫（隨機抽選）──
+  {
+    context: '🏭 台積電南科擴廠計畫曝光，有分析師說 2030 年台積電一家的用電量將占全島 15%。某立委說：「沒有核電，護國神山護不了。」',
+    text: '「護國神山需要電」這個框架在留言區很強勢。你的反應？',
+    rolePrompts: {
+      pragmatic: '這終於說到重點了——電力夠不夠和你的帳單有直接關係。你的反應？',
+      engineer: '台積電用電是實質問題，但把它跟核電捆在一起是在簡化問題。你的反應？',
+      eco: '把台積電電力需求拿來為核電背書，這讓你很不舒服。你的反應？',
+      green: '「護國神山」論述是你的黨在製造的，還是在被對方利用？你的反應？',
+    },
+    choices: [
+      {
+        label: '強力支持',
+        text: '「完全正確！台灣競爭力靠穩定電力，沒有核電就是在跟自己過不去。」',
+        effects: { rage: +10, reason: +5, influence: +20, cred: -10 },
+        tendency: 'blue',
+        feedback: '「護國神山需要電」是這次討論中最有效的支持論點，按讚數通常很高。但它把複雜的能源問題壓縮成了單一因果。'
+      },
+      {
+        label: '質疑框架',
+        text: '「台積電用電是事實，但這不代表只有核電一個解法。再生能源和儲能技術呢？」',
+        effects: { rage: -5, reason: +25, influence: +5, cred: +15 },
+        tendency: 'neutral',
+        feedback: '在留言區，「對，但是」的回應往往被兩邊攻擊——一邊說你反核，一邊說你不懂能源。'
+      },
+      {
+        label: '拆解時間軸',
+        text: '「核電重啟至少需要 5-10 年，台積電 2026 年就要電，你算過時間嗎？」',
+        effects: { rage: +10, reason: +20, influence: +10, cred: +5 },
+        tendency: 'neutral',
+        feedback: '時間軸問題確實是核電論者難以回答的。重啟不是馬上有電，這個事實很多人沒意識到。'
+      },
+      {
+        label: '拉回帳單',
+        text: '「少說廢話，先搞定電費再說。現在帳單漲了多少你知道嗎？」',
+        effects: { rage: +15, reason: -5, influence: +15, cred: -15 },
+        tendency: 'neutral',
+        feedback: '把抽象的能源政策拉到個人帳單層面，是一種有效的情緒轉移，但迴避了政策討論的核心。'
+      }
+    ]
+  },
+  {
+    context: '🏝️ 達悟族代表出現在媒體上：「蘭嶼核廢料桶已嚴重銹蝕，遷移計畫一再跳票。政府在談重啟，我們的問題你們忘了嗎？」',
+    text: '達悟族的聲音被放入這場討論。你怎麼回應？',
+    rolePrompts: {
+      eco: '這是你最重視的議題之一——核廢料問題在蘭嶼早就是現在進行式。你怎麼回應？',
+      green: '這發生在你的黨執政期間也沒有解決。你怎麼回應？',
+      blue: '你知道蘭嶼核廢料問題，但你覺得它被拿來當反核電的政治工具。你怎麼回應？',
+      engineer: '蘭嶼的問題是核廢料管理問題，技術上有解，政治上卡住了。你怎麼回應？',
+    },
+    choices: [
+      {
+        label: '先解決再說',
+        text: '「蘭嶼核廢料必須先處理，才有資格談重啟核電。這是最基本的誠信問題。」',
+        effects: { rage: -5, reason: +20, influence: +5, cred: +20 },
+        tendency: 'green',
+        feedback: '這是跨越藍綠的共識點之一——即使支持核電，許多人也承認蘭嶼問題必須先處理。'
+      },
+      {
+        label: '切割議題',
+        text: '「蘭嶼是獨立議題，不應跟核電是否重啟綁在一起討論。混為一談是在製造情緒。」',
+        effects: { rage: +5, reason: +10, influence: +5, cred: -5 },
+        tendency: 'blue',
+        feedback: '「切割議題」策略在政治上常見，但批評者認為是在迴避責任。留言區會有人追問：那蘭嶼什麼時候處理？'
+      },
+      {
+        label: '歷史正義',
+        text: '「達悟族承受了島上的能源代價幾十年，卻從未被平等對待。這不只是環保問題，是歷史不正義。」',
+        effects: { rage: -10, reason: +15, influence: 0, cred: +25 },
+        tendency: 'green',
+        feedback: '從歷史正義角度談蘭嶼，是留言區最不常見也最有深度的回應。但它往往在政治討論的噪音中被淹沒。'
+      },
+      {
+        label: '略過不回',
+        text: '（你看了看，決定不回覆這個。這個問題太複雜了。）',
+        effects: { rage: 0, reason: 0, influence: -10, cred: +5 },
+        tendency: 'neutral',
+        feedback: '在留言區，複雜的問題往往被跳過。「太複雜」本身就是一種政治答案。'
+      }
+    ]
+  },
+  {
+    context: '🏛️ 執政黨內某派系立委開記者會：「總統宣布重啟評估，但黨內沒有充分討論，這不是黨的決定。」黨主席隨後也表示「尊重個人意見」。',
+    text: '你怎麼看這個黨內公開分裂？',
+    rolePrompts: {
+      green: '你的黨出現內部矛盾。你是感到希望，還是更失望？你怎麼看這個黨內公開分裂？',
+      partisan: '你一直把反核當成你陣營的立場，但現在誰才是「你的陣營」？你怎麼看這個黨內公開分裂？',
+      blue: '執政黨內部開始吵架——你感到的是痛快還是警覺？你怎麼看這個黨內公開分裂？',
+      media: '你的職業直覺告訴你這是個報導角度。但作為一個有立場的人，你怎麼看這個黨內公開分裂？',
+    },
+    choices: [
+      {
+        label: '笑看吃瓜',
+        text: '「哈哈，當年一起反核的現在撕起來了，比任何政治劇都精彩。」',
+        effects: { rage: +15, reason: -10, influence: +20, cred: -15 },
+        tendency: 'blue',
+        feedback: '黨內分裂讓批評者振奮，讓支持者困惑。這種吃瓜心態是真實的，但迴避了政策本身的問題。'
+      },
+      {
+        label: '這叫民主',
+        text: '「這才是正常政黨應有的樣子——不同意見可以公開說，不照黨紀走。」',
+        effects: { rage: -5, reason: +20, influence: 0, cred: +20 },
+        tendency: 'neutral',
+        feedback: '「黨內民主」是少數在這次討論中能跨越立場獲得共感的說法——但它可能也是一種過度樂觀的解讀。'
+      },
+      {
+        label: '問誰負責',
+        text: '「黨說沒共識，總統說不是政治問題——那這個決定到底是誰做的？誰負責？」',
+        effects: { rage: +10, reason: +20, influence: +5, cred: +10 },
+        tendency: 'neutral',
+        feedback: '問責問題是這波討論裡最難被回答的——決策者不清楚，責任也就可以一直推。'
+      },
+      {
+        label: '回歸政策',
+        text: '「不管黨怎麼吵，問題還是那幾個：核安、核廢、民意。黨內分裂只是表演。」',
+        effects: { rage: -10, reason: +25, influence: -5, cred: +15 },
+        tendency: 'neutral',
+        feedback: '把焦點從政黨戲劇拉回政策實質，是理性討論的最難動作，也是最少人能做到的。'
+      }
+    ]
+  },
+  {
+    context: '👷 一名自稱在核三廠服務 15 年的工程師留言：「我比你們所有人更了解廠裡的狀況。我不反對重啟，但你們討論的方向讓我很無奈——因為真正的問題根本沒有人提到。」（418 讚）',
+    text: '418 讚的工程師說「真正的問題沒人提」。你怎麼回應？',
+    rolePrompts: {
+      engineer: '你也是理工背景，你很想知道「真正的問題」是什麼，但也對這種賣關子感到煩躁。你怎麼回應？',
+      eco: '你對「我是專家所以我支持核電」這種論述很警惕。你怎麼回應？',
+      media: '這是一個絕佳的採訪對象。但你現在是用個人帳號留言，不是用媒體身份。你怎麼回應？',
+      exhausted: '又一個說「你們不懂」但不說清楚的人。你的反應？',
+    },
+    choices: [
+      {
+        label: '請你說清楚',
+        text: '「那你說。你說了 15 年工作經驗，真正的問題是什麼？別賣關子。」',
+        effects: { rage: +10, reason: +15, influence: +10, cred: +5 },
+        tendency: 'neutral',
+        feedback: '「賣關子」式的權威發言在留言區很常見。要求對方說清楚是正當的——但往往換來「說了也沒用」的回應。'
+      },
+      {
+        label: '尊重專業',
+        text: '「謝謝現場人員的聲音。你說的話比任何政治人物都可信。」',
+        effects: { rage: -5, reason: +10, influence: +5, cred: +15 },
+        tendency: 'blue',
+        feedback: '「尊重專業」值得肯定，但如果對方不願說清楚，這種尊重並不能推進討論。'
+      },
+      {
+        label: '質疑身份',
+        text: '「誰知道你真的是不是核三廠員工？匿名留言，隨便說說。」',
+        effects: { rage: +20, reason: -5, influence: +15, cred: -20 },
+        tendency: 'neutral',
+        feedback: '在網路上質疑對方身份是合理的，但這個動作本身往往被認為是在逃避討論。對方有沒有道理跟身份無關。'
+      },
+      {
+        label: '共鳴但無力',
+        text: '「我懂你說的無奈。這場討論從一開始就是各說各話，專業意見根本進不去。」',
+        effects: { rage: -10, reason: +15, influence: -5, cred: +10 },
+        tendency: 'neutral',
+        feedback: '認知到討論品質低落，但選擇了沮喪而不是行動。這是留言區裡很多人最後的心情。'
+      }
+    ]
+  },
+  {
+    context: '📱 一名 1998 年出生的人在原帖留言：「你們吵了三十年廢核不廢核。我翻了一下，核廢料問題 1990 年代就有了。我 2000 年出生，廢料比我還老。然後你們說要我們承擔？這個留言區就是為什麼我不想討論政治。」（1.2k 讚）',
+    text: '這則留言在 Z 世代被瘋狂轉發。你怎麼回應這代際控訴？',
+    rolePrompts: {
+      exhausted: '你自己也有類似的疲憊感，但你是比這個孩子更老的世代。你怎麼回應這代際控訴？',
+      eco: '廢料比人還老這件事你早就知道，但聽到 1998 年出生的人說出來，感覺還是不一樣。你怎麼回應？',
+      green: '這個孩子說的，有一部分是你的黨在幾十年執政期間沒解決的事。你怎麼回應？',
+      media: '「代際創傷」是個好報導角度。但你現在是用個人帳號留言。你怎麼回應這代際控訴？',
+    },
+    choices: [
+      {
+        label: '承認虧欠',
+        text: '「你說的對。我們這代人讓這個問題拖了太久。對不起。」',
+        effects: { rage: -15, reason: +10, influence: -5, cred: +30 },
+        tendency: 'neutral',
+        feedback: '在島上的政治討論中，「承認虧欠」是最少見的回應，但往往是最能打開對話的一種。'
+      },
+      {
+        label: '反駁情緒',
+        text: '「1.2k 讚不等於你說的是對的。廢料問題複雜，這樣說是在簡化問題。」',
+        effects: { rage: +15, reason: +10, influence: +10, cred: -10 },
+        tendency: 'neutral',
+        feedback: '反駁 Z 世代留言在四十歲以上用戶中很常見。問題是：對方說的事實部分完全正確，反駁情緒讓自己顯得更站不住腳。'
+      },
+      {
+        label: '共鳴轉分享',
+        text: '「這是這條貼文裡最清醒的聲音。轉。」',
+        effects: { rage: -5, reason: +5, influence: +20, cred: +10 },
+        tendency: 'neutral',
+        feedback: '「轉」是一種有力的行動，但它本身不是答案。1.2k 讚加了你的一個，廢料還是在那裡。'
+      },
+      {
+        label: '鼓勵繼續',
+        text: '「你說得好。但「不想討論政治」才是讓這種情況持續的原因之一。我懂你的疲憊，但我希望你不要放棄。」',
+        effects: { rage: -10, reason: +20, influence: +10, cred: +20 },
+        tendency: 'neutral',
+        feedback: '鼓勵 Z 世代繼續參與而不是批評或共鳴，是一種需要定力才能維持的回應方式。'
+      }
+    ]
+  },
+  {
+    context: '📜 有人翻出 2021 年核四公投結果：55% 反對、45% 支持。留言：「公投民意說不要，現在一個行政決定就翻掉了。什麼叫尊重民主？」',
+    text: '公投結果和現在決定方向相反。你怎麼看這個矛盾？',
+    rolePrompts: {
+      green: '你當初投票反對核四。現在這一票的意義是什麼？你怎麼看這個矛盾？',
+      blue: '你當初投票支持核四。現在反過來了——但你高興得起來嗎？你怎麼看這個矛盾？',
+      partisan: '「程序正義」一直是你這邊的武器。現在這把武器是不是轉向了？你怎麼看這個矛盾？',
+      media: '「公投民意 vs 行政決定」是一個很好的報導框架。但你個人怎麼看這個矛盾？',
+    },
+    choices: [
+      {
+        label: '程序問題',
+        text: '「不管你支不支持核電，這樣繞過公投的方式就是不對。民主不是選擇性執行的。」',
+        effects: { rage: -5, reason: +25, influence: +5, cred: +20 },
+        tendency: 'neutral',
+        feedback: '程序正義論點在藍綠之間都有共鳴，但也很快被質疑：「你以前也沒在乎程序」。'
+      },
+      {
+        label: '情勢不同了',
+        text: '「公投是 2021 年，現在是 2025 年。能源情勢不一樣了，政策本來就要因時制宜。」',
+        effects: { rage: +10, reason: +10, influence: +5, cred: -5 },
+        tendency: 'blue',
+        feedback: '「情勢改變」論述是支持方的主要辯護，但批評者認為這等於說任何公投結果都可以被覆蓋。'
+      },
+      {
+        label: '那就重新公投',
+        text: '「既然情勢改變了，就重新公投。讓人民再決定一次，敢嗎？」',
+        effects: { rage: +15, reason: +15, influence: +15, cred: +10 },
+        tendency: 'green',
+        feedback: '「再公投」的呼聲很強，但推動公投需要時間和資源，留言區很難推動實際行動。'
+      },
+      {
+        label: '那次公投有問題',
+        text: '「那次公投的題目本來就有問題，投票率也只有 41%。那個結果能代表民意嗎？」',
+        effects: { rage: +20, reason: +5, influence: +10, cred: -10 },
+        tendency: 'blue',
+        feedback: '質疑公投有效性在支持方很常見，但這個策略容易被反問：「那你要哪種民主程序才算數？」'
+      }
+    ]
+  },
+  {
+    context: '🌏 有人引用 IPCC 氣候報告：「核能的生命週期碳排放量與風能相近，比太陽能低。支持氣候行動的人反核，說不通。」另一人說：「廢料問題才是碳排以外的環境成本，你沒算進去。」',
+    text: '氣候科學被拿來支持核電。你的立場怎麼回應？',
+    rolePrompts: {
+      eco: '你一直相信科學。但這個「科學支持核電」的說法讓你必須想清楚自己的立場邏輯。你怎麼回應？',
+      green: '氣候和核電這兩個議題，你的黨在這裡有一個沒說清楚的矛盾。你怎麼回應？',
+      engineer: '這是你最熟悉的領域——碳排數字是真的，但比較框架有很多選擇方式。你怎麼回應？',
+      exhausted: '這種「用科學辯護」的話術你見過太多次了。你怎麼回應？',
+    },
+    choices: [
+      {
+        label: '接受事實',
+        text: '「IPCC 說的是事實，核能碳排確實低。但低碳不等於無風險，廢料問題是另一個維度的問題。」',
+        effects: { rage: -10, reason: +25, influence: 0, cred: +25 },
+        tendency: 'neutral',
+        feedback: '「低碳但有廢料風險」是少數在留言區能站得住腳的中立分析——但說這話的人往往兩邊都得罪。'
+      },
+      {
+        label: '質疑論述意圖',
+        text: '「IPCC 沒有叫你建核電廠，它只是做碳排比較。拿科學來包裝政治決定，請分清楚。」',
+        effects: { rage: +10, reason: +15, influence: +5, cred: +5 },
+        tendency: 'green',
+        feedback: '「科學中立 vs 政策選擇」的區分是有效的論點，但在留言區，這種細緻區分很容易被淹沒。'
+      },
+      {
+        label: '科學就是支持',
+        text: '「IPCC、IEA、WHO 都說核電是氣候解方。反核就是反科學，就這麼簡單。」',
+        effects: { rage: +15, reason: -5, influence: +20, cred: -15 },
+        tendency: 'blue',
+        feedback: '把複雜的多因素問題簡化成「支持科學 vs 反科學」，在留言區效果很好，但這種框架本身就是在簡化科學。'
+      },
+      {
+        label: '選擇沉默',
+        text: '（這個問題太複雜，你說什麼都會被斷章取義。你決定不回應。）',
+        effects: { rage: 0, reason: +5, influence: -10, cred: +5 },
+        tendency: 'neutral',
+        feedback: '選擇沉默的人在留言戰中越來越多。沉默不會被斷章取義，但也不會推進任何討論。'
+      }
+    ]
+  },
+  {
+    context: '⚡ 甲在留言區貼圖說：「台灣去年備轉容量率從未低於 10%，缺電根本是誇大的謊言。」乙立刻回：「你貼的是年均值，台積電廠區的尖峰用電時段是另一回事——問問台電工程師。」兩人吵了 120 則留言。',
+    text: '數字戰開打。你選邊嗎？',
+    rolePrompts: {
+      pragmatic: '這就是你最想知道的事——電到底夠不夠？你選邊嗎？',
+      engineer: '你知道甲說的是年均值，乙說的是尖峰值，兩個都是事實，但代表不同的問題。你選邊嗎？',
+      media: '「數字可以說謊」是一個你報導過很多次的現象。你選邊嗎？',
+    },
+    choices: [
+      {
+        label: '支持甲',
+        text: '「數字不說謊。備轉容量夠就是夠，缺電說法是在製造恐慌，為核電背書。」',
+        effects: { rage: +10, reason: +5, influence: +15, cred: -10 },
+        tendency: 'green',
+        feedback: '年均備轉容量確實沒有低過警戒線，但批評者指出：台積電擴廠後的尖峰用電還沒算進去。'
+      },
+      {
+        label: '支持乙',
+        text: '「看尖峰，不要看平均。電力系統最怕的就是尖峰崩潰，別被漂亮的年均值騙了。」',
+        effects: { rage: +10, reason: +10, influence: +15, cred: -5 },
+        tendency: 'blue',
+        feedback: '尖峰用電確實是更關鍵的指標，但台灣近年尖峰也沒有大規模停電，這點批評者不願提。'
+      },
+      {
+        label: '兩個都有道理',
+        text: '「甲說的是年均值的事實，乙說的是尖峰值的事實。兩個都是真的，但指向不同的問題。」',
+        effects: { rage: -10, reason: +25, influence: -5, cred: +20 },
+        tendency: 'neutral',
+        feedback: '這是留言區裡最正確但最無聊的回應——兩邊都不滿意，因為你沒有幫他們贏得論戰。'
+      },
+      {
+        label: '要求原始資料',
+        text: '「把台電的原始數據和台積電的用電預測貼出來，我們來算。不然都是各說各話。」',
+        effects: { rage: -5, reason: +20, influence: +5, cred: +15 },
+        tendency: 'neutral',
+        feedback: '要求原始資料是正確的，但在社群媒體上，大部分人沒有時間或能力去驗證，這個回應通常被跳過。'
+      }
+    ]
+  },
+  {
+    context: '🎙️ 一名 200 萬追蹤的財經 YouTuber 發文：「身為一個數字理性的人，我認為核電重啟在經濟上是必要的。」影片 24 小時內破百萬觀看，留言區傾倒式支持。有人說「他懂什麼核電」，有人說「終於有有影響力的人說了」。',
+    text: '網紅進場。你怎麼看這個影響力的介入？',
+    rolePrompts: {
+      media: '你清楚這種「意見領袖介入」對輿論的影響。你怎麼看這個影響力的介入？',
+      blue: '這個 YouTuber 說了你早就想說的話，而且有百萬人看。你怎麼看這個影響力的介入？',
+      eco: '百萬人在看一個財經 YouTuber 談核電，這讓你感到什麼？你怎麼看這個影響力的介入？',
+      exhausted: '又一個來蹭熱點的人。你怎麼看這個影響力的介入？',
+    },
+    choices: [
+      {
+        label: '說得對就支持',
+        text: '「他說的邏輯沒錯，追蹤數跟對錯沒有關係。論點對就是對。」',
+        effects: { rage: -5, reason: +15, influence: +5, cred: +10 },
+        tendency: 'blue',
+        feedback: '論點的對錯確實不依賴說話者的身份，但研究顯示，有影響力的人說同樣的話會被接受得更快——這本身就是需要警惕的現象。'
+      },
+      {
+        label: '跟他的專業無關',
+        text: '「財經 YouTuber 談核能，就像我去談腦外科。你去你的，核電有核電的專家。」',
+        effects: { rage: +10, reason: +10, influence: +5, cred: +5 },
+        tendency: 'neutral',
+        feedback: '「術業有專攻」的論點合理，但現代輿論的運作方式不以專業邊界劃分，影響力才是硬通貨。'
+      },
+      {
+        label: '這就是問題所在',
+        text: '「百萬人的核電認知，由一個財經 YouTuber 決定。這是媒體生態的問題，不是核電問題。」',
+        effects: { rage: -5, reason: +20, influence: +10, cred: +15 },
+        tendency: 'neutral',
+        feedback: '這個觀察非常正確，也很無力——因為說這話的人往往沒有百萬追蹤。'
+      },
+      {
+        label: '衝去留言',
+        text: '「去他頻道留言反駁。錯誤資訊不糾正，算我的責任。」',
+        effects: { rage: +15, reason: +5, influence: +20, cred: -5 },
+        tendency: 'neutral',
+        feedback: '去別人的主場留言反駁，通常會被粉絲圍攻，很少改變任何人的想法——但有人就是要做。'
+      }
+    ]
+  },
+  {
+    context: '🏭 你的工廠或辦公室昨天停電了兩小時。同事說：「這就是反核的代價。」你知道那次停電是因為台電設備故障，跟核電沒有直接關係——但同事不想聽解釋。',
+    text: '親身體驗被拿來當論點。你怎麼回應？',
+    rolePrompts: {
+      pragmatic: '停電損失是真實的。但「核電 vs 停電」是正確的因果關係嗎？你怎麼回應？',
+      engineer: '你知道這次停電和核電的關係是零，但怎麼說清楚？你怎麼回應？',
+      exhausted: '你已經懶得解釋了。你怎麼回應？',
+    },
+    choices: [
+      {
+        label: '糾正因果',
+        text: '「那次停電是設備故障，跟核電重啟不重啟沒有關係。不要把不同的問題混在一起。」',
+        effects: { rage: -5, reason: +25, influence: -5, cred: +20 },
+        tendency: 'neutral',
+        feedback: '糾正錯誤因果是正確的。但在情緒化的時刻，對的話也很難被聽進去——特別是對方損失已經發生了。'
+      },
+      {
+        label: '順著說',
+        text: '「對，所以能源政策要認真討論，不是繼續這樣停下去。」',
+        effects: { rage: -10, reason: +10, influence: +10, cred: +5 },
+        tendency: 'blue',
+        feedback: '迴避了因果錯誤，但把話題帶向你想去的方向。這是一種常見的對話技巧——是否誠實，見仁見智。'
+      },
+      {
+        label: '不想惹麻煩',
+        text: '（點點頭，繼續工作。這種對話沒有結果的。）',
+        effects: { rage: 0, reason: 0, influence: -10, cred: +10 },
+        tendency: 'neutral',
+        feedback: '辦公室政治讓人選擇沉默。但沉默也讓錯誤的因果繼續在同事腦中紮根。'
+      },
+      {
+        label: '乾脆開噴',
+        text: '「你不懂停電原因就不要亂說。台電設備老化問題是另一個議題，別混在一起。」',
+        effects: { rage: +20, reason: +5, influence: -5, cred: -5 },
+        tendency: 'neutral',
+        feedback: '你說的是對的，但說話方式保證了對方不會聽進去。正確論點 + 糟糕的呈現方式 = 白費。'
+      }
+    ]
+  },
+  {
+    context: '📰 兩家媒體報導同一則核電新聞：A 台標題「能源自主新突破」，B 台標題「核危機步步進逼」。有人截圖對比說：「你看的媒體決定你的立場。讀者都只是媒體養的。」',
+    text: '媒體框架的問題被點出來了。你怎麼回應？',
+    rolePrompts: {
+      media: '你就是做媒體的。這張對比圖讓你有一點複雜的感受。你怎麼回應？',
+      exhausted: '你早就知道媒體是這樣了。這又讓你更加疲憊。你怎麼回應？',
+      green: '你平常看的媒體可能也是B台那種框架。你怎麼回應？',
+      blue: '你平常看的媒體可能也是A台那種框架。你怎麼回應？',
+    },
+    choices: [
+      {
+        label: '交叉閱讀',
+        text: '「所以就多看幾家媒體，不要只看一家。這不是新知識，是基本媒體識讀。」',
+        effects: { rage: -10, reason: +20, influence: 0, cred: +20 },
+        tendency: 'neutral',
+        feedback: '媒體識讀的建議是對的，但研究顯示，大部分人不會主動交叉閱讀——因為閱讀符合自己立場的媒體更舒適。'
+      },
+      {
+        label: '媒體本來就有立場',
+        text: '「媒體本來就有立場，這不是新聞。重要的是你知道你在看哪種立場的媒體。」',
+        effects: { rage: -5, reason: +15, influence: +5, cred: +15 },
+        tendency: 'neutral',
+        feedback: '接受媒體有立場這個事實，比假裝有「客觀媒體」更誠實。但這個說法也可能被用來為偏頗媒體護航。'
+      },
+      {
+        label: '我的媒體沒問題',
+        text: '「我看的那家是比較中立的。問題是對方看的那家太偏了。」',
+        effects: { rage: +10, reason: -5, influence: +10, cred: -15 },
+        tendency: 'neutral',
+        feedback: '「我的媒體客觀，你的媒體偏頗」是最普遍的媒體認知偏誤。幾乎每個人都這樣想自己看的媒體。'
+      },
+      {
+        label: '反媒體情緒',
+        text: '「媒體都是垃圾，兩邊都在帶風向。我已經不看新聞了，自己查一手資料。」',
+        effects: { rage: +5, reason: +5, influence: -5, cred: +5 },
+        tendency: 'neutral',
+        feedback: '「自己查一手資料」是理想，但原能會、台電、立院紀錄這些一手資料，真正讀過的人寥寥無幾。'
+      }
+    ]
+  },
+  {
+    context: '🤝 一個深藍人士和一個深綠人士在留言串意外吵出了共識：「不管你支不支持核電，廢料處置在任何方案下都必須先解決，這一點兩邊沒有分歧。」這串被截圖廣傳，有人說「這才是正常討論」，有人說「別天真了，政治不是這樣運作的」。',
+    text: '跨陣營共識出現了。你怎麼看？',
+    rolePrompts: {
+      green: '共識是你的黨的立場先讓步才出現的。你怎麼看？',
+      blue: '共識是在廢料問題上，這意味著核電重啟還有條件。你怎麼看？',
+      exhausted: '你見過太多這種「意外共識」最後什麼都沒發生。你怎麼看？',
+      media: '「跨陣營共識」是一個好的報導角度，但你也知道它明天就會消失。你怎麼看？',
+    },
+    choices: [
+      {
+        label: '擴散這個共識',
+        text: '「這才是討論應該有的樣子。轉！讓更多人看到還可以這樣討論。」',
+        effects: { rage: -10, reason: +10, influence: +20, cred: +15 },
+        tendency: 'neutral',
+        feedback: '擴散正面討論是有意義的行動，但演算法喜歡衝突，一篇罵戰帖的觸及往往是理性討論的十倍。'
+      },
+      {
+        label: '保持懷疑',
+        text: '「兩個網友說好話不代表政策方向改變。共識在留言區，不在立院，這很容易被忘記。」',
+        effects: { rage: 0, reason: +20, influence: -5, cred: +15 },
+        tendency: 'neutral',
+        feedback: '懷疑共識的持久性是合理的。但懷疑本身如果成為「不行動」的理由，它也是一種選擇的後果。'
+      },
+      {
+        label: '共識是假象',
+        text: '「別被騙了。廢料問題「先解決」的標準，兩邊的答案根本不一樣。這個共識撐不過兩天。」',
+        effects: { rage: +10, reason: +15, influence: +5, cred: +5 },
+        tendency: 'neutral',
+        feedback: '確實，「廢料先解決」的標準不同，共識可能只是表面的。但揭穿共識也讓對話的空間縮小了。'
+      },
+      {
+        label: '感到一點希望',
+        text: '「我知道這可能沒有用，但這種對話讓我覺得這個島還有一點救。按讚了。」',
+        effects: { rage: -15, reason: +5, influence: +10, cred: +10 },
+        tendency: 'neutral',
+        feedback: '承認希望的脆弱，但還是選擇表達。這是一種需要一點勇氣的回應，在冷嘲熱諷的留言區裡。'
+      }
+    ]
+  },
+  {
+    context: '🗳️ 有政治評論員說：「這個時機點不是偶然的。看哪個縣市選情最緊，核電廠就在那裡。能源政策被當成選舉工具，這屆選民要認清楚。」有人反駁說：「能源問題是真實的，不是所有事情都是選舉考量。」',
+    text: '「政策是選舉操作」的指控出現了。你的反應？',
+    rolePrompts: {
+      partisan: '你一直在等這個論點出現。你的反應？',
+      green: '這個指控讓你很不舒服，因為你的黨的決定確實有選舉壓力。你的反應？',
+      media: '你分析過選舉操作和政策考量的關係。你的反應？',
+      exhausted: '什麼事最後都變成選舉。你的反應？',
+    },
+    choices: [
+      {
+        label: '完全就是',
+        text: '「選舉操作教科書案例。等著看，結果出來前不會有任何實質進度。」',
+        effects: { rage: +15, reason: +5, influence: +20, cred: -10 },
+        tendency: 'neutral',
+        feedback: '懷疑政策時機點是合理的。但「全部都是選舉考量」也可能讓你錯過那些真的因為政策需要才出現的決定。'
+      },
+      {
+        label: '兩者都有',
+        text: '「能源需求是真實的，選舉考量也是真實的。兩件事可以同時成立。」',
+        effects: { rage: -5, reason: +22, influence: +5, cred: +18 },
+        tendency: 'neutral',
+        feedback: '這種「兩件事同時為真」的回應是最正確的，也是最難讓人滿意的——因為它拒絕給出一個清楚的敵人。'
+      },
+      {
+        label: '問題是真的',
+        text: '「時機點可以質疑，但電力缺口是真實的。不要因為時機不好就否定問題的存在。」',
+        effects: { rage: -10, reason: +18, influence: +5, cred: +12 },
+        tendency: 'blue',
+        feedback: '把政治時機和政策實質分開討論，是有意義的區分。但批評者認為這是在幫執政黨的選舉操作洗白。'
+      },
+      {
+        label: '看清楚就好',
+        text: '「當然有選舉考量。但選民如果看清楚這點，還是可以做出自己的判斷。」',
+        effects: { rage: 0, reason: +15, influence: +5, cred: +15 },
+        tendency: 'neutral',
+        feedback: '「看清楚但還是有選擇空間」的立場，假設選民有足夠資訊和動機——在台灣的選舉環境裡，這個假設有多成立？'
+      }
+    ]
+  },
+  {
+    context: '🔌 輸配電工程師在留言區說：「大家都在討論核電廠能不能重啟，沒人討論電網能不能承受。台灣有些輸配電設備超過 30 年，核電重啟會讓本來就老化的電網壓力更大，這才是沒人說的問題。」',
+    text: '電網基礎設施的問題浮出來了。你的反應？',
+    rolePrompts: {
+      engineer: '這個問題你早就知道，但一直沒人在留言區提。你的反應？',
+      pragmatic: '這又是一個你沒有想過的層面。你的反應？',
+      media: '「沒人說的問題」就是你要報的那種新聞。你的反應？',
+    },
+    choices: [
+      {
+        label: '感謝補充',
+        text: '「謝謝這個觀點。電網老化確實是獨立的問題，核電重啟討論裡幾乎沒人提。」',
+        effects: { rage: -10, reason: +22, influence: +5, cred: +20 },
+        tendency: 'neutral',
+        feedback: '台灣電網老化是真實問題，台電每年編列更新預算但仍跟不上需求。這個觀點在留言區很少出現，出現的時候往往被忽視。'
+      },
+      {
+        label: '一起算進去',
+        text: '「所以核電重啟預算裡應該包含電網升級費用。一起算清楚，才知道真正的成本。」',
+        effects: { rage: -5, reason: +25, influence: +10, cred: +18 },
+        tendency: 'neutral',
+        feedback: '把電網升級成本納入核電重啟的總成本計算，這是少數在留言區有建設性的回應。'
+      },
+      {
+        label: '那就先更新電網',
+        text: '「先把電網更新完再說核電，否則重啟了也是壓垮駱駝的最後一根稻草。」',
+        effects: { rage: +5, reason: +15, influence: +5, cred: +10 },
+        tendency: 'green',
+        feedback: '「先做完基礎設施再說核電」的論點合理，但批評者認為這等於又一個「拖延核電」的理由。'
+      },
+      {
+        label: '這是另一個問題',
+        text: '「電網老化是電網老化的問題，核電重不重啟是核電的問題，不要混在一起討論。」',
+        effects: { rage: +10, reason: +5, influence: +5, cred: -5 },
+        tendency: 'blue',
+        feedback: '兩個問題確實可以分開處理，但在實際執行上，電網承載能力直接影響新電源的接入能力，切割討論會漏掉這個關聯。'
+      }
+    ]
+  },
+  {
+    context: '🏷️ 你在一篇核電貼文下留了一則評論，語氣算是中肯。沒想到被某個帳號截圖，標上「這就是典型的深[藍/綠]洗地邏輯」，在另一個平台流傳，累積了 2000 個嘲笑表情。你從未說過自己是哪個立場。',
+    text: '你的留言被貼標籤、被嘲諷。你怎麼處理？',
+    rolePrompts: {
+      media: '你比任何人都了解這種截圖文化的運作方式。但這次輪到你自己了。你怎麼處理？',
+      exhausted: '你就知道這樣。這就是你不想發言的原因。你怎麼處理？',
+      engineer: '你說的明明是技術事實，但被貼上政治標籤了。你怎麼處理？',
+    },
+    choices: [
+      {
+        label: '公開澄清',
+        text: '「截圖斷章取義，我的原文在這裡。我沒有說我的立場，我只說了X和Y。」',
+        effects: { rage: +5, reason: +15, influence: +10, cred: +10 },
+        tendency: 'neutral',
+        feedback: '公開澄清有機會讓部分人重新理解你的立場，但大多數人不會回去看原文——他們看到的只是那個截圖。'
+      },
+      {
+        label: '不回應',
+        text: '（不理他。這種帳號就是要你理他，你不給就沒有後續。）',
+        effects: { rage: -10, reason: +5, influence: -10, cred: +10 },
+        tendency: 'neutral',
+        feedback: '「不理」讓事情不繼續發酵，但也讓那個截圖繼續流傳而沒有糾正。沉默有時候看起來像是默認。'
+      },
+      {
+        label: '反擊截圖者',
+        text: '「去看這個帳號的歷史發言，全都是同一套操作。我把他的截圖歷史整理出來了。」',
+        effects: { rage: +20, reason: +5, influence: +15, cred: -5 },
+        tendency: 'neutral',
+        feedback: '以截圖對截圖，以操作對操作——這種反擊在留言戰中有效，但代價是你也加入了這場你原本不想進入的戰場。'
+      },
+      {
+        label: '從此不發言',
+        text: '「從這件事我學到了一件事：在社群媒體上任何話都可以被曲解。我以後不發言了。」',
+        effects: { rage: -15, reason: 0, influence: -20, cred: +5 },
+        tendency: 'neutral',
+        feedback: '選擇退出是最可以理解的反應，也是讓社群媒體的「趕走不同聲音」機制繼續生效的結果。'
+      }
+    ]
+  },
+  {
+    context: '🔬 原能會主委接受電視訪問說：「核電重啟在技術上可行，但依現有程序，需要至少 2 至 3 年的安全審查。」有人說「終於有官員說實話」，有人說「審查 2 至 3 年等於變相反對，根本在拖」，有人說「審查這麼快？廢料問題沒那麼快解決吧」。',
+    text: '主管機關發言了。你怎麼解讀這個「2 至 3 年」？',
+    rolePrompts: {
+      engineer: '你知道核安審查的程序，2 至 3 年其實是樂觀估計。你怎麼解讀這個「2 至 3 年」？',
+      pragmatic: '2 至 3 年——那就是說這個決定對你的下一張電費帳單沒有影響。你怎麼解讀這個「2 至 3 年」？',
+      partisan: '「2 至 3 年」剛好跨過下一次選舉。你怎麼解讀這個「2 至 3 年」？',
+    },
+    choices: [
+      {
+        label: '這是合理程序',
+        text: '「核安審查 2 至 3 年是基本的。比這快才應該懷疑。審查不能趕進度，這是常識。」',
+        effects: { rage: -10, reason: +22, influence: 0, cred: +20 },
+        tendency: 'neutral',
+        feedback: '核安審查的時間確實有其合理性，但台灣過去對運轉中核電廠的監管記錄讓一些人懷疑「審查」的實質意義。'
+      },
+      {
+        label: '根本就是拖',
+        text: '「2 至 3 年是在拖。審查程序早就該在宣布前啟動，現在說還要 2 至 3 年，時間表根本沒有認真規劃。」',
+        effects: { rage: +15, reason: +10, influence: +15, cred: -5 },
+        tendency: 'blue',
+        feedback: '提前啟動審查的批評是合理的。但核安審查的啟動時機本身也涉及政治敏感性——在政策宣布前偷跑，政治代價很大。'
+      },
+      {
+        label: '根本不夠',
+        text: '「2 至 3 年只審安全，廢料最終處置的規劃呢？廢料問題不是 2 至 3 年能解決的。」',
+        effects: { rage: -5, reason: +20, influence: +10, cred: +15 },
+        tendency: 'green',
+        feedback: '核安審查和廢料最終處置是兩個不同的問題，把它們分開討論才清楚。批評者說兩個都沒解決，支持者說可以分階段處理。'
+      },
+      {
+        label: '先看看再說',
+        text: '「現在什麼都說不準。等審查結果出來再討論，現在說什麼都是猜測。」',
+        effects: { rage: -10, reason: +5, influence: -10, cred: +5 },
+        tendency: 'neutral',
+        feedback: '「等等看」是最保留的回應，也是最容易被批評為「不關心」或「逃避」的一種。但有時候，等確實是對的。'
+      }
+    ]
+  }
+];
+
+// ── ARCHETYPES ──
+const ARCHETYPES = {
+  fire_kimin: {
+    emoji: '🔥',
+    title: '火爆鄉民',
+    desc: '你在留言區從不缺席。情緒是你的武器，按讚是你的彈藥。你說的不一定是真的，但你說出了很多人想說卻不敢說的話。代價是：兩週後你已經忘了這件事，但你的留言還在那裡。',
+    type: 'type-rage',
+    tendency: 'blue'
+  },
+  calm_analyst: {
+    emoji: '🔭',
+    title: '冷靜分析師',
+    desc: '你是留言區最寂寞的人。你說的都有根據，但沒有人想聽。你的留言三讚，他的謾罵一百讚。不過你睡得著。這是鬼島少數保持清醒的方式之一。',
+    type: 'type-reason',
+    tendency: 'neutral'
+  },
+  influencer: {
+    emoji: '📱',
+    title: '側翼網紅',
+    desc: '你天生知道什麼內容會被推廣。你的貼文不一定精確，但它們總是在最對的時機出現。你在為誰服務？你自己可能也不確定。但流量是真的。',
+    type: 'type-influence',
+    tendency: 'mixed'
+  },
+  skeptic: {
+    emoji: '🤔',
+    title: '懷疑論者',
+    desc: '你不相信任何一邊說的話。這讓你在爭論中格外清醒，也格外孤獨。你看穿了很多人的動機，但你的公信力也讓人覺得你「事情太多」。兩邊都嫌你煩。',
+    type: 'type-cred',
+    tendency: 'neutral'
+  },
+  mob_member: {
+    emoji: '⚡',
+    title: '出征隊員',
+    desc: '有人呼叫就出現，對象不重要，陣營才重要。你的留言是集體行動的一部分，單獨看起來像噪音，集合起來有時能改變輿論。代價是：你很少花時間搞清楚事情的全貌。',
+    type: 'type-mixed',
+    tendency: 'blue'
+  },
+  silent_lurker: {
+    emoji: '👻',
+    title: '無聲潛水者',
+    desc: '你看了所有留言，但你什麼都沒說。你是沉默的多數，也是演算法最難觸及的人。你的想法是最複雜的，卻完全沒有進入這場討論。島上很多重要的事，就這樣在你的沉默中被決定了。',
+    type: 'type-silent',
+    tendency: 'neutral'
+  }
+};
+
+// ── GLOSSARY ──
+const GLOSSARY = {
+  'NIMBY':    '鄰避效應（Not In My Back Yard）：民眾反對在自家附近建設核廢料場、焚化爐等設施的心態，即使理解其必要性。',
+  'Onkalo':   '芬蘭的核廢料最終處置場。位於地底約 400 公尺的花崗岩層，設計封存 10 萬年，是目前全球唯一在建的深層地質處置庫。',
+  '非核家園': '2016 年民進黨政府訂定的能源政策目標：2025 年前關閉所有核電廠，以再生能源替代，後因電力缺口問題多次延後。',
+  '最終處置': '核廢料的永久性深層地質儲存，有別於暫存桶。需確保數萬至十萬年的安全隔離，全球尚無完整落實案例。',
+  '備轉容量率': '電力系統備用發電容量占總用電需求的比率。低於 10% 視為供電吃緊，低於 6% 可能發佈限電警告。',
+  '核安審查': '核電廠重啟前須通過的安全評估程序，由原子能委員會執行，包括設備、人員、應變計畫等項目審查。',
+  'IPCC':     '聯合國政府間氣候變遷專門委員會。定期發布氣候科學評估報告，是各國能源與減碳政策的主要科學依據。',
+};
+
+function addTooltips(text) {
+  let out = text;
+  for (const [term, def] of Object.entries(GLOSSARY)) {
+    const escaped = def.replace(/"/g, '&quot;');
+    out = out.replace(
+      new RegExp(term, 'g'),
+      `<span class="tip" data-tip="${escaped}">${term}</span>`
+    );
+  }
+  return out;
+}
+
+// ── STANCES ──
+const STANCES = {
+  green: {
+    label: '😔 深綠選民',
+    cssClass: 'green-stance',
+    tagClass: 'green',
+    tagLabel: '深綠選民 😔',
+    tendencyClass: 'green',
+    tendencyLabel: '深綠傾向',
+    blueMode: false,
+    desc: '你曾在街上舉過「我是人，我反核」的牌子。執政黨是你的黨。今天，總統宣布了一件讓你說不出話的事。'
+  },
+  blue: {
+    label: '😏 深藍鄉民',
+    cssClass: 'blue-stance',
+    tagClass: 'blue',
+    tagLabel: '深藍鄉民 😏',
+    tendencyClass: 'blue',
+    tendencyLabel: '深藍傾向',
+    blueMode: true,
+    desc: '你等這一天等很久了。那些嘲笑你「反科學」的人，今天臉怎麼了？你已經準備好打開截圖資料夾了。'
+  },
+  eco: {
+    label: '😤 環保戰士',
+    cssClass: 'eco-stance',
+    tagClass: 'eco',
+    tagLabel: '環保戰士 😤',
+    tendencyClass: 'green',
+    tendencyLabel: '反核傾向',
+    blueMode: false,
+    desc: '你反核不是為了政黨，是因為核廢料根本沒有妥善的去處。你看過貯存場的報告，你清楚最終處置是什麼意思。今天的新聞讓你覺得從來沒有人認真解決問題，只是一直推遲。'
+  },
+  pragmatic: {
+    label: '🧾 電費焦慮族',
+    cssClass: 'pragmatic-stance',
+    tagClass: 'pragmatic',
+    tagLabel: '電費焦慮族 🧾',
+    tendencyClass: 'neutral',
+    tendencyLabel: '務實中立',
+    blueMode: false,
+    desc: '上個月電費又漲了。你不在乎藍綠，你只想知道重啟核電能不能讓帳單少一點。政治口水讓你很煩，但電費通知讓你更煩。你只是一個普通人，想要一個正常的答案。'
+  },
+  partisan: {
+    label: '📢 在野側翼',
+    cssClass: 'partisan-stance',
+    tagClass: 'partisan',
+    tagLabel: '在野側翼 📢',
+    tendencyClass: 'blue',
+    tendencyLabel: '在野傾向',
+    blueMode: true,
+    desc: '你不一定每個核電細節都搞得清楚，但你知道執政黨說什麼你第一個要質疑。今天的新聞讓你有點困惑——反核一直是進步立場，但現在是誰在反誰？'
+  },
+  engineer: {
+    label: '🔬 理工仔',
+    cssClass: 'engineer-stance',
+    tagClass: 'engineer',
+    tagLabel: '理工仔 🔬',
+    tendencyClass: 'neutral',
+    tendencyLabel: '技術理性',
+    blueMode: false,
+    desc: '你看過核安報告，也看過廢料最終處置的技術文件。你覺得大部分的討論都在廢話。問題不是核電安不安全，問題是廢料放哪裡、誰監管、幾百年後算誰的——這些問題沒有人認真回答。'
+  },
+  media: {
+    label: '📰 媒體工作者',
+    cssClass: 'media-stance',
+    tagClass: 'media',
+    tagLabel: '媒體工作者 📰',
+    tendencyClass: 'neutral',
+    tendencyLabel: '輿論觀察',
+    blueMode: false,
+    desc: '你整天在追這個議題的留言，分析哪些是真實民意，哪些是帶風向。你比任何人都了解輿論的運作——也比任何人都清楚，了解運作不代表你免疫。你的立場是什麼？你自己也開始說不清楚。'
+  },
+  exhausted: {
+    label: '😮‍💨 政治疲憊族',
+    cssClass: 'exhausted-stance',
+    tagClass: 'exhausted',
+    tagLabel: '政治疲憊族 😮‍💨',
+    tendencyClass: 'neutral',
+    tendencyLabel: '倦怠中立',
+    blueMode: false,
+    desc: '你已經看過太多次了。選舉、爭議、口水、然後什麼都沒變。這次核電的事你也看了，覺得兩邊都在演戲。你不想再輸入意見了，但你也沒辦法完全不在意。'
+  }
+};
+
+// ── STANCE POOL (no-repeat) ──
+let stancePool = [];
+
+function shufflePool() {
+  stancePool = Object.keys(STANCES);
+  for (let i = stancePool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [stancePool[i], stancePool[j]] = [stancePool[j], stancePool[i]];
+  }
+}
+
+// ── INIT ──
+function assignStance() {
+  if (stancePool.length === 0) {
+    // Pool exhausted — ask if user still wants to play
+    const rerollEl = document.getElementById('reroll-area');
+    if (rerollEl) {
+      rerollEl.innerHTML = `
+        <div style="padding:14px 16px;background:rgba(255,255,255,0.04);border-radius:10px;border:1px solid var(--border);text-align:center;">
+          <div style="font-size:0.95rem;font-weight:800;color:var(--text);margin-bottom:6px;">全部被你選完了 🎉</div>
+          <div style="font-size:0.84rem;color:var(--muted);margin-bottom:12px;">你到底要不要玩？</div>
+          <button onclick="reshuffleAndContinue()" style="background:var(--orange);color:white;border:none;border-radius:8px;padding:8px 22px;font-size:0.84rem;font-weight:700;cursor:pointer;font-family:inherit;">要！重新骰一輪 ↺</button>
+        </div>`;
+    }
+    return;
+  }
+
+  assignedStance = stancePool.pop();
+  const s = STANCES[assignedStance];
+
+  const display = document.getElementById('stance-display');
+  const desc = document.getElementById('stance-description');
+  const startBtn = document.getElementById('start-btn');
+  const rerollEl = document.getElementById('reroll-area');
+
+  display.classList.remove('loading');
+  display.textContent = s.label;
+  display.className = `assigned-stance ${s.cssClass}`;
+  desc.textContent = s.desc;
+
+  if (s.blueMode) {
+    startBtn.classList.add('blue-mode');
+  } else {
+    startBtn.classList.remove('blue-mode');
+  }
+
+  // Update reroll button — show remaining count, or exhaustion notice
+  if (rerollEl) {
+    if (stancePool.length === 0) {
+      rerollEl.innerHTML = `
+        <div style="padding:14px 16px;background:rgba(255,255,255,0.04);border-radius:10px;border:1px solid var(--border);text-align:center;">
+          <div style="font-size:0.95rem;font-weight:800;color:var(--text);margin-bottom:6px;">全部被你選完了 🎉</div>
+          <div style="font-size:0.84rem;color:var(--muted);margin-bottom:12px;">你到底要不要玩？</div>
+          <button onclick="reshuffleAndContinue()" style="background:var(--orange);color:white;border:none;border-radius:8px;padding:8px 22px;font-size:0.84rem;font-weight:700;cursor:pointer;font-family:inherit;">要！重新骰一輪 ↺</button>
+        </div>`;
+    } else {
+      rerollEl.innerHTML = `<button onclick="assignStance()" style="background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:7px 18px;font-size:0.8rem;cursor:pointer;font-family:inherit;transition:all 0.15s;" onmouseover="this.style.borderColor='#60a5fa';this.style.color='#f1f5f9'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">↺ 不滿意，重新分配（還剩 ${stancePool.length} 種）</button>`;
+    }
+  }
+}
+
+function reshuffleAndContinue() {
+  shufflePool();
+  assignStance();
+}
+
+function refillQuestionPool() {
+  // Shuffle all 10 indices into questionPool
+  questionPool = QUESTION_POOL.map((_, i) => i);
+  for (let i = questionPool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [questionPool[i], questionPool[j]] = [questionPool[j], questionPool[i]];
+  }
+}
+
+function buildActiveQuestions() {
+  // If fewer than 5 left, replenish (guarantees cross-game no-repeat within a cycle)
+  if (questionPool.length < 5) refillQuestionPool();
+  // Draw next 5 from pool (splice removes them so they can't appear next game)
+  const indices = questionPool.splice(0, 5);
+  activeQuestions = indices.map(i => QUESTION_POOL[i]);
+}
+
+function startGame() {
+  currentRound = 0;
+  stats = { rage: 0, reason: 0, influence: 0, cred: 0 };
+  trackPlay('ep1');
+  buildActiveQuestions();
+  showScreen('screen-game');
+  loadRound();
+  // brief entrance animation: bars rise to small seed values
+  setTimeout(() => {
+    stats = { rage: 8, reason: 10, influence: 6, cred: 12 };
+    updateStatsDisplay(false);
+  }, 300);
+}
+
+// ── GAME LOGIC ──
+function loadRound() {
+  const q = activeQuestions[currentRound];
+  const total = activeQuestions.length;
+
+  document.getElementById('round-label').textContent = `第 ${currentRound + 1} 關 / ${total}`;
+  document.getElementById('progress-fill').style.width = `${((currentRound + 1) / total) * 100}%`;
+
+  // ── FB post header ──
+  const POSTER_MAP = {
+    '📰':'新聞媒體分享','🏛️':'政治新聞','🌐':'網路熱議',
+    '📊':'數據整理','📢':'公告消息','⚡':'用電話題',
+    '🗳️':'選舉回顧','🌱':'環保倡議','📱':'網紅動態',
+    '🔬':'主管機關發言','🏷️':'截圖流傳','💡':'留言熱議',
+    '🔆':'能源議題','🤔':'輿論觀察','💬':'熱門討論',
+  };
+  const POSTER_TIMES = ['1小時前','2小時前','3小時前','5小時前','8小時前','12小時前'];
+  const ctxRaw = q.context.replace(/<[^>]+>/g,'');
+  const emojiM = ctxRaw.match(/^([\u{1F000}-\u{1FFFF}]\uFE0F?|[\u{2600}-\u{27BF}]\uFE0F?)/u);
+  const postEmoji = emojiM ? emojiM[1] : '💬';
+  const posterName = POSTER_MAP[postEmoji] || '時事熱議';
+  // Strip leading emoji+space from display body
+  const bodyStart = emojiM ? [...emojiM[0]].length : 0;
+  const postBody = q.context.slice(bodyStart).replace(/^\s+/,'');
+  const LIKE_COUNTS = [178,231,305,142,89,413,267,194,328,156,241,87,362,210,445];
+  document.getElementById('fb-poster-avatar').textContent = postEmoji;
+  document.getElementById('fb-poster-name').textContent = posterName;
+  document.getElementById('fb-poster-time').textContent = POSTER_TIMES[currentRound % POSTER_TIMES.length] + ' · 🌐';
+  document.getElementById('fb-likes').textContent = LIKE_COUNTS[currentRound % LIKE_COUNTS.length];
+  document.getElementById('q-context').innerHTML = addTooltips(postBody);
+
+  // ── Prompt + player card ──
+  const promptText = (q.rolePrompts && q.rolePrompts[assignedStance]) ? q.rolePrompts[assignedStance] : q.text;
+  document.getElementById('q-text').innerHTML = addTooltips(promptText);
+
+  const s = STANCES[assignedStance];
+  const roleColors = {
+    green:'#4ade80', blue:'#60a5fa', eco:'#22d3ee', pragmatic:'#fbbf24',
+    partisan:'#c084fc', engineer:'#a5b4fc', media:'#f9a8d4', exhausted:'#94a3b8'
+  };
+  const rc = roleColors[assignedStance] || '#94a3b8';
+  const emoji = s.label.split(' ')[0];
+  const roleName = s.label.replace(/^\S+\s/, '');
+  const playerCard = document.getElementById('player-card');
+  playerCard.style.borderLeftColor = rc;
+  playerCard.style.background = rc + '14';
+  playerCard.innerHTML = `
+    <div class="player-card-emoji">${emoji}</div>
+    <div class="player-card-info">
+      <div class="player-card-you">你正在扮演</div>
+      <div class="player-card-name" style="color:${rc}">${roleName}</div>
+      <div class="player-card-tend">${s.tendencyLabel}</div>
+    </div>
+  `;
+  // Mini avatar in comment prompt
+  const miniAvatar = document.getElementById('comment-your-avatar');
+  if (miniAvatar) miniAvatar.textContent = emoji;
+
+  // ── Render choices as comments ──
+  const EMOTION_EMOJI = { rage:'😤', reason:'🧐', influence:'📢', neutral:'🤷' };
+  const container = document.getElementById('choices-container');
+  container.innerHTML = '';
+  q.choices.forEach((choice, i) => {
+    const e = choice.effects;
+    const dominant = (e.rage > 0 && e.rage >= Math.max(e.reason||0, e.influence||0, e.cred||0))
+      ? 'rage' : (e.reason > 0 && e.reason >= Math.max(e.rage||0, e.influence||0, e.cred||0))
+      ? 'reason' : (e.influence > 0 && e.influence >= Math.max(e.rage||0, e.reason||0, e.cred||0))
+      ? 'influence' : 'neutral';
+    const div = document.createElement('div');
+    div.className = `comment-choice emotion-${dominant}`;
+    div.innerHTML = `
+      <div class="comment-choice-avatar">${EMOTION_EMOJI[dominant] || '💬'}</div>
+      <div class="comment-choice-body">
+        <div class="comment-bubble">
+          <div class="comment-bubble-name">${choice.label}</div>
+          <div class="comment-bubble-text">${addTooltips(choice.text)}</div>
+        </div>
+        <div class="comment-meta">👍 讚 · 回覆</div>
+        <div class="comment-effect">${formatEffects(choice.effects)}</div>
+      </div>
+    `;
+    div.onclick = () => selectChoice(i);
+    container.appendChild(div);
+  });
+
+  document.getElementById('feedback-box').className = 'feedback-box';
+  document.getElementById('next-btn').className = 'next-btn';
+  updateStatsDisplay();
+}
+
+function formatEffects(effects) {
+  return Object.entries(effects)
+    .filter(([k, v]) => v !== 0)
+    .map(([k, v]) => {
+      const names = { rage: '怒氣', reason: '理性', influence: '影響力', cred: '公信力' };
+      return `${names[k]} ${v > 0 ? '+' + v : v}`;
+    }).join('　');
+}
+
+function selectChoice(index) {
+  const q = activeQuestions[currentRound];
+  const choice = q.choices[index];
+
+  // Save old stats for delta animation
+  const oldStats = { ...stats };
+
+  // Apply effects
+  Object.entries(choice.effects).forEach(([k, v]) => {
+    stats[k] = Math.max(0, Math.min(100, stats[k] + v));
+  });
+
+  // Track natural tendency
+  if (choice.tendency !== 'neutral') {
+    naturalTendency = choice.tendency;
+  }
+
+  // Visual feedback
+  const comments = document.querySelectorAll('.comment-choice');
+  comments.forEach((c, i) => {
+    c.classList.add('disabled');
+    if (i === index) {
+      c.classList.add('selected');
+      c.classList.add('revealed');
+    }
+  });
+
+  // Show feedback
+  const fb = document.getElementById('feedback-box');
+  fb.innerHTML = `📊 ${addTooltips(choice.feedback)}`;
+  fb.classList.add('show');
+
+  document.getElementById('next-btn').classList.add('show');
+  updateStatsDisplay(true, oldStats);
+
+  // 讚數 + 留言數微增
+  const likesEl    = document.getElementById('fb-likes');
+  const commentsEl = document.getElementById('fb-comments');
+  if (likesEl)    bumpEngageNum(likesEl,    2, 9);
+  if (commentsEl) bumpEngageNum(commentsEl, 1, 4);
+}
+
+function bumpEngageNum(el, min, max) {
+  const delta = Math.floor(Math.random() * (max - min + 1)) + min;
+  el.textContent = parseInt(el.textContent.replace(/,/g, ''), 10) + delta;
+  el.classList.remove('engage-bump');
+  void el.offsetWidth;
+  el.classList.add('engage-bump');
+  setTimeout(() => el.classList.remove('engage-bump'), 500);
+}
+
+function nextRound() {
+  currentRound++;
+  if (currentRound >= activeQuestions.length) {
+    showResult();
+  } else {
+    loadRound();
+  }
+}
+
+function updateStatsDisplay(flash, old) {
+  ['rage', 'reason', 'influence', 'cred'].forEach(k => {
+    const valEl = document.getElementById(`stat-${k}`);
+    valEl.textContent = stats[k];
+    const fill = document.getElementById(`fill-${k}`);
+    fill.style.width = stats[k] + '%';
+    if (flash && stats[k] > 0) {
+      fill.classList.remove('flash');
+      void fill.offsetWidth;
+      fill.classList.add('flash');
+      setTimeout(() => fill.classList.remove('flash'), 500);
+    }
+    // Delta badge + number bump
+    if (old && stats[k] !== old[k]) {
+      const d = stats[k] - old[k];
+      valEl.classList.remove('bumping');
+      void valEl.offsetWidth;
+      valEl.classList.add('bumping');
+      setTimeout(() => valEl.classList.remove('bumping'), 400);
+      const badge = document.createElement('span');
+      badge.className = 'delta-badge';
+      badge.textContent = (d > 0 ? '+' : '') + d;
+      badge.style.color = d > 0 ? '#4ade80' : '#f87171';
+      valEl.parentElement.appendChild(badge);
+      setTimeout(() => badge.remove(), 800);
+    }
+  });
+}
+
+// ── RESULT ──
+function showResult() {
+  const archetype = determineArchetype();
+  const a = ARCHETYPES[archetype];
+
+  document.getElementById('result-emoji').textContent = a.emoji;
+  document.getElementById('result-title').textContent = a.title;
+  document.getElementById('result-desc').textContent = a.desc;
+  document.getElementById('archetype-card').className = `archetype-card ${a.type}`;
+
+  // Twist: compare assigned vs actual
+  const sd = STANCES[assignedStance];
+  const assignedLabel = sd.label.replace(/^\S+\s/, '');  // strip emoji
+  const assignedClass = sd.tagClass;
+
+  let actualTendency = naturalTendency || 'neutral';
+  let actualLabel, actualClass;
+  if (actualTendency === 'green') { actualLabel = '反核傾向'; actualClass = 'green'; }
+  else if (actualTendency === 'blue') { actualLabel = '擁核傾向'; actualClass = 'blue'; }
+  else { actualLabel = '中立務實'; actualClass = 'neutral'; }
+
+  document.getElementById('twist-assigned').textContent = sd.label;
+  document.getElementById('twist-assigned').className = `value ${assignedClass}`;
+  document.getElementById('twist-actual').textContent = actualLabel;
+  document.getElementById('twist-actual').className = `value ${actualClass}`;
+
+  const verdict = document.getElementById('twist-verdict');
+  const match = sd.tendencyClass === actualTendency;
+  if (match) {
+    verdict.textContent = `✅ 你的選擇和被分配的立場一致。你的人設是真實的——還是說，你在被分配的角色裡找到了認同？`;
+    verdict.className = 'twist-verdict match';
+  } else if (actualTendency === 'neutral') {
+    verdict.textContent = `🌀 你的選擇跨越了分配給你的立場。你可能比你以為的更難被貼標籤——或者你只是習慣換位思考。`;
+    verdict.className = 'twist-verdict diff';
+  } else {
+    verdict.textContent = `⚡ 被分配到對面，你的選擇卻傾向另一邊。如果你生在那個同溫層，你的發言可能完全不同。`;
+    verdict.className = 'twist-verdict diff';
+  }
+
+  // Stats bars (delayed animation)
+  setTimeout(() => {
+    ['rage', 'reason', 'influence', 'cred'].forEach(k => {
+      document.getElementById(`r-${k}`).style.width = stats[k] + '%';
+      document.getElementById(`rn-${k}`).textContent = stats[k];
+    });
+  }, 300);
+
+  // Share text
+  const gameUrl = 'https://scatjay.github.io/nuke-or-not/ep1/';
+  const shareQuips = {
+    fire_kimin:   `系統強制分配我當「${assignedLabel}」，核電這題我測出「🔥 火爆鄉民」。\n不是我的立場，是我的血壓。\n兩邊都在說自己理性，兩邊留言都像菜市場。`,
+    calm_analyst: `被迫扮「${assignedLabel}」走完全程，最後測出「🔭 冷靜分析師」。\n留言區三個讚，謾罵一百讚。這是鬼島的物理定律。\n我知道這沒用，但我還是把完整數據都看完了。`,
+    influencer:   `被分配成「${assignedLabel}」，一路跟著流量走，測出「📱 側翼網紅」。\n我不確定我在幫誰，但讚數不會說謊。\n核電要不要重啟我不知道，但這篇貼文一定有人轉。`,
+    skeptic:      `被迫站「${assignedLabel}」，結果測出「🤔 懷疑論者」。\n我誰都不信。連這個測驗我也只信一半。\n（但我還是分享了。這很矛盾。我知道。）`,
+    mob_member:   `系統塞給我「${assignedLabel}」的身份，測完是「⚡ 出征隊員」。\n呼叫就出現，問題是被誰呼叫、去打誰，我其實不太確定。\n反正島上的架就是這樣吵起來的。`,
+    silent_lurker:`被分配成「${assignedLabel}」，做了五道題，測出「👻 無聲潛水者」。\n核電吵了半個月，我全看了，什麼都沒說。\n這則分享已經打破了我的原則。請不要叫我解釋。`
+  };
+  const quip = shareQuips[archetype] || shareQuips['silent_lurker'];
+  const shareMsg = `${quip}\n\n→ ${gameUrl}\n#鬼島鄉民測驗 #核電篇`;
+  document.getElementById('share-text').textContent = shareMsg;
+
+  showScreen('screen-result');
+}
+
+function determineArchetype() {
+  const { rage, reason, influence, cred } = stats;
+  const max = Math.max(rage, reason, influence, cred);
+
+  if (rage > 60 && influence > 40) return 'mob_member';
+  if (reason < 20 && rage < 20 && influence < 20 && cred < 20) return 'silent_lurker';
+  if (max === rage && rage > 40) return 'fire_kimin';
+  if (max === reason && reason > 40) return 'calm_analyst';
+  if (max === influence && influence > 40) return 'influencer';
+  if (max === cred && cred > 40) return 'skeptic';
+  return 'silent_lurker';
+}
+
+// ── SHARE ──
+function copyShare() {
+  const text = document.getElementById('share-text').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('.share-btn.copy');
+    btn.textContent = '✅ 已複製！';
+    setTimeout(() => btn.textContent = '複製文字', 2000);
+  });
+}
+
+function shareFB() {
+  const url = encodeURIComponent('https://scatjay.github.io/nuke-or-not/ep1/');
+  window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
+}
+
+function shareLINE() {
+  const msg = document.getElementById('share-text').textContent;
+  window.open(`https://line.me/R/msg/text/?${encodeURIComponent(msg)}`, '_blank');
+}
+
+function retry() {
+  stats = { rage: 0, reason: 0, influence: 0, cred: 0 };
+  currentRound = 0;
+  naturalTendency = '';
+  assignStance();
+  showScreen('screen-intro');
+}
+
+// ── UTILS ──
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ── PLAY COUNTER ──
+const SB_URL = '';  // 填入 Supabase URL 啟用全域計數
+const SB_KEY = '';  // 填入 Supabase anon key
+
+async function trackPlay(game) {
+  const k = `ghost_plays_${game}`;
+  localStorage.setItem(k, String(parseInt(localStorage.getItem(k) || '0', 10) + 1));
+  if (SB_URL && SB_KEY) {
+    try {
+      await fetch(`${SB_URL}/rest/v1/rpc/increment_play`, {
+        method: 'POST',
+        headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ gid: game })
+      });
+    } catch(e) {}
+  }
+}
+
+// ── BOOT ──
+shufflePool();
+refillQuestionPool();
+assignStance();
+</script>
+</body>
+</html>

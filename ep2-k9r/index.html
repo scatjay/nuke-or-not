@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>您有615則留言｜鬼島核電篇 EP.2</title>
+<meta property="og:title" content="您有615則留言｜你會怎麼管理這場留言戰？">
+<meta property="og:description" content="扮演貼文作者，615則留言正在炸鍋。你要隱藏哪些？回哪些？每個決定都在塑造你的同溫層厚度。">
+<meta property="og:image" content="https://scatjay.github.io/nuke-or-not/ep2-k9r/cover.png">
+<meta property="og:url" content="https://scatjay.github.io/nuke-or-not/ep2-k9r/">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+  :root {
+    --orange: #ea580c;
+    --orange-light: #fed7aa;
+    --green: #16a34a;
+    --blue: #1d4ed8;
+    --red: #dc2626;
+    --yellow: #ca8a04;
+    --gray: #6b7280;
+    --dark: #0f172a;
+    --darker: #020617;
+    --card: #1e293b;
+    --border: #334155;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans TC', '微軟正黑體', sans-serif;
+    background: var(--darker);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+  #app { width: 100%; max-width: 600px; }
+  .screen { display: none; }
+  .screen.active { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* SHARED */
+  .series-badge {
+    display: inline-block;
+    background: var(--border);
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 2px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+  }
+  .context-box {
+    background: rgba(234,88,12,0.1);
+    border-left: 3px solid var(--orange);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 0.88rem;
+    color: #fed7aa;
+    line-height: 1.6;
+  }
+  .btn {
+    width: 100%;
+    padding: 16px;
+    border-radius: 12px;
+    border: none;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: inherit;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--orange), #c2410c);
+    color: white;
+  }
+  .btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+  .btn:active { transform: translateY(0); }
+
+  /* INTRO */
+  .intro-header { text-align: center; padding: 28px 0 20px; }
+  .intro-title {
+    font-size: clamp(1.8rem, 7vw, 2.8rem);
+    font-weight: 900;
+    line-height: 1.15;
+    margin-bottom: 8px;
+  }
+  .notification-badge {
+    display: inline-block;
+    background: var(--red);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 900;
+    padding: 2px 8px;
+    border-radius: 99px;
+    vertical-align: middle;
+    margin-left: 4px;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.6} }
+  .intro-sub {
+    font-size: 0.95rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+  .role-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  .role-card h3 {
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  .role-name {
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: var(--orange);
+    margin-bottom: 8px;
+  }
+  .role-desc {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* METERS */
+  .meters-bar {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+  }
+  .meters-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .meter-item {}
+  .meter-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    margin-bottom: 4px;
+  }
+  .meter-name { color: var(--muted); }
+  .meter-value { font-weight: 700; }
+  .meter-track {
+    height: 6px;
+    background: var(--border);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .meter-fill {
+    height: 100%;
+    border-radius: 99px;
+    transition: width 0.5s ease;
+  }
+  .meter-fill.echo { background: #f97316; }
+  .meter-fill.dialogue { background: #22d3ee; }
+  .meter-fill.stress { background: var(--red); }
+  .meter-fill.clarity { background: var(--green); }
+
+  /* ── METER CHANGE ANIMATIONS ── */
+  @keyframes valBump { 0%{transform:scale(1)} 35%{transform:scale(1.35)} 100%{transform:scale(1)} }
+  @keyframes deltaFloat { 0%{opacity:1;transform:translateY(0)} 30%{opacity:1} 100%{opacity:0;transform:translateY(-14px)} }
+  .meter-header { position: relative; }
+  .meter-value.bumping { animation: valBump 0.35s ease; }
+  .delta-badge {
+    position: absolute; right: 0; top: -13px;
+    font-size: 0.68rem; font-weight: 800; line-height: 1;
+    animation: deltaFloat 0.75s ease forwards;
+    pointer-events: none;
+  }
+
+  /* COMMENT CARD */
+  .round-info {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+  }
+  .progress-bar {
+    background: var(--border);
+    border-radius: 99px;
+    height: 4px;
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--orange), #fbbf24);
+    border-radius: 99px;
+    transition: width 0.4s ease;
+  }
+
+  .comment-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px;
+    margin-bottom: 14px;
+  }
+  .comment-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+  .commenter-name { font-size: 0.9rem; font-weight: 700; }
+  .commenter-stance {
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 4px;
+  }
+  .stance-dg { background: rgba(22,163,74,0.2); color: #4ade80; }
+  .stance-db { background: rgba(29,78,216,0.2); color: #93c5fd; }
+  .stance-mid { background: rgba(107,114,128,0.2); color: #9ca3af; }
+  .comment-text {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+  .comment-reactions {
+    display: flex;
+    gap: 12px;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+  .reaction-item {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+  .reaction-item.highlight { color: var(--orange); font-weight: 700; }
+
+  .situation-label {
+    font-size: 0.8rem;
+    color: var(--yellow);
+    background: rgba(202,138,4,0.1);
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+
+  /* ACTIONS */
+  .action-title {
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .actions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .action-btn {
+    background: var(--darker);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: inherit;
+    color: var(--text);
+  }
+  .action-btn:hover {
+    border-color: var(--orange);
+    background: rgba(234,88,12,0.05);
+    transform: translateY(-1px);
+  }
+  .action-btn.disabled { opacity: 0.4; pointer-events: none; }
+  .action-btn.selected-hide { border-color: var(--red); background: rgba(220,38,38,0.1); }
+  .action-btn.selected-reply { border-color: #22d3ee; background: rgba(34,211,238,0.08); }
+  .action-btn.selected-like { border-color: var(--green); background: rgba(22,163,74,0.08); }
+  .action-btn.selected-skip { border-color: var(--gray); background: rgba(107,114,128,0.05); }
+  .action-emoji { font-size: 1.4rem; margin-bottom: 4px; }
+  .action-name { font-size: 0.82rem; font-weight: 700; }
+  .action-effect { font-size: 0.68rem; color: var(--muted); margin-top: 2px; }
+
+  .feedback-box {
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 0.84rem;
+    line-height: 1.6;
+    color: #cbd5e1;
+    display: none;
+    margin-bottom: 10px;
+  }
+  .feedback-box.show { display: block; }
+  .next-btn {
+    background: var(--border);
+    color: var(--text);
+    border: none;
+    border-radius: 12px;
+    padding: 14px;
+    width: 100%;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    display: none;
+    transition: all 0.15s;
+  }
+  .next-btn.show { display: block; }
+  .next-btn:hover { background: #475569; }
+
+  /* RESULT */
+  .result-header { text-align: center; padding: 24px 0 16px; }
+  .result-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    background: var(--border);
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .echo-meter-big {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .echo-circle {
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    margin: 0 auto 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border: 4px solid;
+    font-size: 1.8rem;
+    font-weight: 900;
+  }
+  .echo-label { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
+  .echo-title { font-size: 1.4rem; font-weight: 900; margin-bottom: 8px; }
+  .echo-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
+
+  .insight-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .insight-card h4 {
+    font-size: 0.78rem;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .insight-item {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: flex-start;
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+  .insight-icon { font-size: 1rem; flex-shrink: 0; }
+
+  .result-meters {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+  .result-meters h4 {
+    font-size: 0.78rem;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 14px;
+    text-transform: uppercase;
+  }
+  .result-meter-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .result-meter-name { font-size: 0.82rem; width: 64px; color: var(--muted); }
+  .result-meter-bar { flex: 1; height: 8px; background: var(--border); border-radius: 99px; overflow: hidden; }
+  .result-meter-fill { height: 100%; border-radius: 99px; transition: width 1s ease; }
+  .result-meter-fill.echo     { background: #f59e0b; }
+  .result-meter-fill.dialogue { background: #60a5fa; }
+  .result-meter-fill.stress   { background: #ef4444; }
+  .result-meter-fill.clarity  { background: #22c55e; }
+  .result-meter-num { font-size: 0.82rem; font-weight: 700; width: 28px; text-align: right; }
+
+  .share-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+  .share-section h4 {
+    font-size: 0.78rem;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .share-text {
+    background: var(--darker);
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: #cbd5e1;
+    margin-bottom: 12px;
+    border: 1px solid var(--border);
+  }
+  .share-buttons { display: flex; gap: 8px; }
+  .share-btn {
+    flex: 1; padding: 12px 8px;
+    border-radius: 10px; border: none;
+    font-size: 0.85rem; font-weight: 700;
+    cursor: pointer; font-family: inherit;
+    transition: all 0.15s;
+  }
+  .share-btn.copy { background: var(--border); color: var(--text); }
+  .share-btn.copy:hover { background: #475569; }
+  .share-btn.fb { background: #1877f2; color: white; }
+  .share-btn.line { background: #06c755; color: white; }
+
+  .retry-btn {
+    background: transparent;
+    border: 1.5px solid var(--border);
+    color: var(--muted);
+    border-radius: 12px;
+    padding: 12px;
+    width: 100%;
+    font-size: 0.9rem;
+    cursor: pointer;
+    font-family: inherit;
+    margin-bottom: 12px;
+    transition: all 0.15s;
+  }
+  .retry-btn:hover { border-color: var(--text); color: var(--text); }
+
+  .game-footer {
+    text-align: center;
+    padding: 16px 0 8px;
+    font-size: 0.72rem;
+    color: #475569;
+    line-height: 1.8;
+  }
+  .ep-nav { display: flex; gap: 8px; margin-top: 8px; }
+  .ep-link {
+    flex: 1; padding: 10px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--muted);
+    text-decoration: none;
+    transition: all 0.15s;
+  }
+  .ep-link:hover { border-color: var(--orange); color: var(--text); }
+  .ep-link.current { border-color: var(--orange); color: var(--orange); font-weight: 600; }
+  .ep-link.released { border-color: #22c55e; color: #22c55e; }
+  .ep-link.released:hover { border-color: #4ade80; color: #4ade80; }
+  .ep-link.coming-soon {
+    opacity: 0.38;
+    border-style: dashed;
+    cursor: default;
+    pointer-events: none;
+    font-style: italic;
+  }
+
+  /* STANCE SELECT */
+  #stance-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+  .stance-select-card {
+    background: var(--card); border: 2px solid var(--border);
+    border-radius: 12px; padding: 14px 16px; cursor: pointer; transition: all 0.15s;
+  }
+  .stance-select-card:hover { border-color: var(--orange); }
+  .stance-select-card.selected { border-color: var(--orange); background: rgba(234,88,12,0.08); }
+  .stance-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .stance-card-emoji { font-size: 1.5rem; flex-shrink: 0; }
+  .stance-card-name { font-size: 1rem; font-weight: 800; }
+  .stance-card-tag { display: inline-block; font-size: 0.68rem; font-weight: 700; padding: 2px 8px; border-radius: 20px; margin-top: 2px; }
+  .stance-card-post {
+    font-size: 0.78rem; color: var(--muted); font-style: italic;
+    background: var(--darker); border-left: 2px solid var(--border);
+    padding: 6px 10px; border-radius: 0 6px 6px 0; margin-bottom: 8px; line-height: 1.5;
+  }
+  .stance-card-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- INTRO -->
+  <div id="screen-intro" class="screen active">
+    <div class="intro-header">
+      <div class="series-badge">鬼島鄉民測驗 · 核電篇 EP.2</div>
+      <div class="intro-title">
+        您有 615 則留言<span class="notification-badge">🔔</span>
+      </div>
+      <div class="intro-sub">
+        扮演這篇核電貼文的作者。<br>
+        615 則留言正在炸鍋——<br>
+        你要隱藏哪些？回哪些？略過哪些？<br>
+        每個決定都在決定你的同溫層有多厚。
+      </div>
+    </div>
+
+    <p style="font-size:0.88rem;color:var(--muted);line-height:1.6;margin-bottom:12px;">選擇你的貼文立場。不同的立場，收到的留言也完全不同。</p>
+    <div id="stance-grid"></div>
+
+    <div style="font-size:0.82rem;color:var(--muted);background:rgba(255,255,255,0.03);border-radius:8px;padding:10px 12px;margin-bottom:16px;line-height:1.6;">
+      你有四個動作：<strong style="color:var(--text)">隱藏</strong>、<strong style="color:var(--text)">回覆</strong>、<strong style="color:var(--text)">按讚</strong>、<strong style="color:var(--text)">略過</strong>。每個決定都在塑造你的同溫層。
+    </div>
+
+    <div class="context-box">
+      📊 <strong>觀察指標</strong>：同溫層厚度（越高越封閉）、對話品質（越高越多元）、貼文壓力、清醒度
+    </div>
+
+    <button class="btn btn-primary" onclick="startGame()">接收留言，開始管理 →</button>
+
+    <div class="game-footer">
+      三種立場 · 各 6 則留言情境 · 約 3 分鐘
+      <div class="ep-nav">
+        <a class="ep-link released" href="../ep1/">✓ EP.1 臉腫了嗎？</a>
+        <a class="ep-link current" href="#">▶ EP.2 您有615則留言</a>
+        <span class="ep-link coming-soon">EP.3 核廢料放你家 🔒</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAME -->
+  <div id="screen-game" class="screen">
+    <div class="round-info" id="round-info">留言 1 / 6</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill" style="width:16%"></div>
+    </div>
+
+    <div class="meters-bar">
+      <div class="meters-grid">
+        <div class="meter-item">
+          <div class="meter-header">
+            <span class="meter-name">同溫層厚度</span>
+            <span class="meter-value" id="m-echo">20</span>
+          </div>
+          <div class="meter-track"><div class="meter-fill echo" id="fill-echo" style="width:20%"></div></div>
+        </div>
+        <div class="meter-item">
+          <div class="meter-header">
+            <span class="meter-name">對話品質</span>
+            <span class="meter-value" id="m-dialogue">50</span>
+          </div>
+          <div class="meter-track"><div class="meter-fill dialogue" id="fill-dialogue" style="width:50%"></div></div>
+        </div>
+        <div class="meter-item">
+          <div class="meter-header">
+            <span class="meter-name">貼文壓力</span>
+            <span class="meter-value" id="m-stress">10</span>
+          </div>
+          <div class="meter-track"><div class="meter-fill stress" id="fill-stress" style="width:10%"></div></div>
+        </div>
+        <div class="meter-item">
+          <div class="meter-header">
+            <span class="meter-name">清醒度</span>
+            <span class="meter-value" id="m-clarity">60</span>
+          </div>
+          <div class="meter-track"><div class="meter-fill clarity" id="fill-clarity" style="width:60%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="comment-card" id="comment-display">
+      <div class="comment-meta">
+        <div class="avatar" id="c-avatar">😤</div>
+        <div>
+          <div class="commenter-name" id="c-name">留言者</div>
+          <div style="font-size:0.72rem;color:var(--muted)" id="c-time">1天前</div>
+        </div>
+        <span class="commenter-stance" id="c-stance-tag"></span>
+      </div>
+      <div class="comment-text" id="c-text"></div>
+      <div class="comment-reactions">
+        <span class="reaction-item highlight" id="c-likes">👍 0</span>
+        <span class="reaction-item" id="c-replies">💬 0 則回覆</span>
+        <span class="reaction-item" id="c-hidden-badge"></span>
+      </div>
+    </div>
+
+    <div class="situation-label" id="situation-label"></div>
+
+    <div class="action-title">你的決定：</div>
+    <div class="actions-grid">
+      <button class="action-btn" id="btn-hide" onclick="doAction('hide')">
+        <div class="action-emoji">🚫</div>
+        <div class="action-name">隱藏</div>
+        <div class="action-effect">同溫層 +15 / 對話 -10</div>
+      </button>
+      <button class="action-btn" id="btn-reply" onclick="doAction('reply')">
+        <div class="action-emoji">💬</div>
+        <div class="action-name">回覆</div>
+        <div class="action-effect">對話 +10 / 壓力 +15</div>
+      </button>
+      <button class="action-btn" id="btn-like" onclick="doAction('like')">
+        <div class="action-emoji">👍</div>
+        <div class="action-name">按讚</div>
+        <div class="action-effect">同溫層 +5 / 清醒 -5</div>
+      </button>
+      <button class="action-btn" id="btn-skip" onclick="doAction('skip')">
+        <div class="action-emoji">⏭️</div>
+        <div class="action-name">略過</div>
+        <div class="action-effect">清醒 +5 / 壓力 +5</div>
+      </button>
+    </div>
+
+    <div class="feedback-box" id="feedback-box"></div>
+    <button class="next-btn" id="next-btn" onclick="nextRound()">下一則留言 →</button>
+  </div>
+
+  <!-- RESULT -->
+  <div id="screen-result" class="screen">
+    <div class="result-header">
+      <div class="result-badge">貼文管理報告</div>
+    </div>
+
+    <div class="echo-meter-big">
+      <div class="echo-circle" id="echo-circle">
+        <span id="echo-pct">0%</span>
+        <span class="echo-label">同溫層</span>
+      </div>
+      <div class="echo-title" id="echo-title">你的同溫層厚度</div>
+      <div class="echo-desc" id="echo-desc"></div>
+    </div>
+
+    <div class="insight-card">
+      <h4>📋 貼文管理洞察</h4>
+      <div id="insights-list"></div>
+    </div>
+
+    <div class="result-meters">
+      <h4>最終數值</h4>
+      <div class="result-meter-row">
+        <span class="result-meter-name">同溫層</span>
+        <div class="result-meter-bar"><div class="result-meter-fill echo" id="r-echo" style="width:0%"></div></div>
+        <span class="result-meter-num" id="rn-echo">0</span>
+      </div>
+      <div class="result-meter-row">
+        <span class="result-meter-name">對話品質</span>
+        <div class="result-meter-bar"><div class="result-meter-fill dialogue" id="r-dialogue" style="width:0%"></div></div>
+        <span class="result-meter-num" id="rn-dialogue">0</span>
+      </div>
+      <div class="result-meter-row">
+        <span class="result-meter-name">貼文壓力</span>
+        <div class="result-meter-bar"><div class="result-meter-fill stress" id="r-stress" style="width:0%"></div></div>
+        <span class="result-meter-num" id="rn-stress">0</span>
+      </div>
+      <div class="result-meter-row">
+        <span class="result-meter-name">清醒度</span>
+        <div class="result-meter-bar"><div class="result-meter-fill clarity" id="r-clarity" style="width:0%"></div></div>
+        <span class="result-meter-num" id="rn-clarity">0</span>
+      </div>
+    </div>
+
+    <div class="share-section">
+      <h4>你管出了什麼</h4>
+      <div class="share-text" id="share-text"></div>
+      <div class="share-buttons">
+        <button class="share-btn fb" onclick="shareFB()">分享 FB</button>
+        <button class="share-btn line" onclick="shareLINE()">分享 LINE</button>
+      </div>
+    </div>
+    <button class="retry-btn" onclick="retry()">↺ 重新管理</button>
+
+    <div class="game-footer">
+      府城數位人文實驗室
+      <div class="ep-nav">
+        <a class="ep-link released" href="../ep1/">✓ EP.1 臉腫了嗎？</a>
+        <a class="ep-link current" href="#">▶ EP.2 您有615則留言</a>
+        <span class="ep-link coming-soon">EP.3 核廢料放你家 🔒</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+<script>
+let currentRound = 0;
+let selectedStance = 'activist';
+let activeComments = [];
+let meters = { echo: 20, dialogue: 50, stress: 10, clarity: 60 };
+const actions_log = [];
+
+// ════════════════════════════════════════
+// POST STANCES — 三種身份，不是鄉民類型
+// ════════════════════════════════════════
+const POST_STANCES = {
+  activist: {
+    id: 'activist', emoji: '📢', title: '前反核倡議者',
+    tagBg: 'rgba(22,163,74,0.2)', tagColor: '#4ade80',
+    post: '「當年我舉過那個牌子。今天，我不知道當時那個我算什麼。」',
+    desc: '你曾在凱道舉牌「我是人，我反核」，投票給執政黨是因為非核家園的承諾。今天，你發了一篇不知道該怎麼定義的文——不是憤怒，是困惑加上一點什麼。',
+    startMeters: { echo: 25, dialogue: 45, stress: 18, clarity: 55 }
+  },
+  resident: {
+    id: 'resident', emoji: '🏘️', title: '核電廠附近居民',
+    tagBg: 'rgba(234,88,12,0.2)', tagColor: '#fb923c',
+    post: '「我住核三廠十公里外。今天看到這個新聞，不知道該怎麼想。想聽聽大家的意見。」',
+    desc: '你不是什麼政治人，只是住在那裡。你發的不是立場文，是一個真實的問題——然後留言區炸了，各路人馬開始告訴你「你應該怎麼想」。',
+    startMeters: { echo: 12, dialogue: 58, stress: 22, clarity: 65 }
+  },
+  journalist: {
+    id: 'journalist', emoji: '📰', title: '能源線記者',
+    tagBg: 'rgba(139,92,246,0.2)', tagColor: '#a78bfa',
+    post: '「整理了五個重啟核電還沒答案的問題：核安審查、廢料處置、民意程序、電網準備、成本估算。目前全部空白。」',
+    desc: '你跑能源線五年，試圖整理一篇客觀的分析。結果兩邊都說你偏頗——藍的說你是綠媒在洗地，綠的說你給重啟開後門。中立在台灣留言區是最孤獨的立場。',
+    startMeters: { echo: 8, dialogue: 65, stress: 12, clarity: 75 }
+  }
+};
+
+// ════════════════════════════════════════
+// COMMENT SETS — 3 身份 × 6 則留言
+// ════════════════════════════════════════
+const COMMENT_SETS = {
+
+  // ── 前反核倡議者：你曾舉牌，現在困惑 ──
+  activist: [
+  {
+    avatar: '😏', name: '匿名鄉民A', stance: 'deep_blue', stanceLabel: '深藍',
+    time: '1天前', likes: 156, replies: 4,
+    text: '哈哈哈哈哈！當初最大聲的，現在最安靜了。臉腫了嗎？',
+    situation: '⚡ 156讚。這是你貼文下目前最多人互動的留言，已被大量截圖轉傳。',
+    actions: {
+      hide:  { echo: +18, dialogue: -12, stress: -12, clarity: +5,
+               fb: '你隱藏了它。156讚說明它引起共鳴——被隱藏不代表消失，他自己還是看得到，可能覺得你在壓制。' },
+      reply: { echo: -12, dialogue: +15, stress: +28, clarity: +10,
+               fb: '你回覆了。這種回覆會被截圖，在你控制不了的地方流傳。你說的每一個字都會被放大。' },
+      like:  { echo: +5, dialogue: -5, stress: -5, clarity: -15,
+               fb: '你按讚了嘲諷你的留言。有人覺得你在認錯，有人覺得你在冷嘲熱諷——沒有人知道你真正的意思。' },
+      skip:  { echo: 0, dialogue: 0, stress: +10, clarity: +8,
+               fb: '你略過了。它還在那裡，演算法還在推它，成為很多人看你這篇貼文的第一印象。' }
+    }
+  },
+  {
+    avatar: '😔', name: '前倡議夥伴', stance: 'deep_green', stanceLabel: '同路人',
+    time: '1天前', likes: 12, replies: 1,
+    text: '我和你的感覺一樣。不是憤怒，是一種很難描述的東西——像是你以為自己站在一個地方，然後地板不見了。',
+    situation: '😶 12讚。來自曾經並肩的人。低調，但說中了你現在的感覺。',
+    actions: {
+      hide:  { echo: +5, dialogue: -5, stress: 0, clarity: -10,
+               fb: '你隱藏了理解你的人。也許你不想讓這種情緒被看見，也許你覺得這樣太脆弱了。' },
+      reply: { echo: -5, dialogue: +10, stress: +8, clarity: +12,
+               fb: '你回應了。這是留言區裡最真實的交流——不需要立場，只是兩個人在說他們真實的感受。' },
+      like:  { echo: 0, dialogue: +8, stress: -5, clarity: +8,
+               fb: '一個讚，讓對方知道你看到了。有時候這就夠了。' },
+      skip:  { echo: +5, dialogue: -5, stress: +5, clarity: +5,
+               fb: '略過了。他說的話留在那裡，沒有人回應——就像現在很多人的感受一樣。' }
+    }
+  },
+  {
+    avatar: '📣', name: '黨員護航留言', stance: 'deep_green', stanceLabel: '執政黨支持者',
+    time: '1天前', likes: 45, replies: 3,
+    text: '政策本來就要因時制宜。你這樣說只會讓對手更得意。我們應該支持黨的決定，內部批評要有場合。',
+    situation: '🟢 45讚，來自你同一個政治陣營的人。他在要你「顧全大局」。',
+    actions: {
+      hide:  { echo: +12, dialogue: -10, stress: -5, clarity: -8,
+               fb: '你隱藏了要你閉嘴的留言。這種「內部批評要有場合」的邏輯，是很多人選擇沉默的原因。' },
+      reply: { echo: -8, dialogue: +15, stress: +18, clarity: +20,
+               fb: '你回應了。你是否同意「有場合」的說法？你的答案決定了你和這個政治圈的關係。' },
+      like:  { echo: +8, dialogue: -8, stress: -5, clarity: -15,
+               fb: '你按讚了「顧全大局」的留言。也許你覺得他說得對——或者你只是不想繼續這個對話。' },
+      skip:  { echo: +5, dialogue: 0, stress: +5, clarity: +5,
+               fb: '略過了。「內部批評要有場合」的聲音繼續存在。很多人因為這種壓力選擇不說話。' }
+    }
+  },
+  {
+    avatar: '🧐', name: '理性提問者', stance: 'center', stanceLabel: '中間',
+    time: '1天前', likes: 21, replies: 0,
+    text: '你的問題是廢料問題還沒解決？還是你在生氣被背叛？這兩件事不一樣，說清楚比較好。',
+    situation: '💬 21讚，切中要害的區分。這個問題問的是你自己，不是核電。',
+    actions: {
+      hide:  { echo: +10, dialogue: -10, stress: -5, clarity: -8,
+               fb: '你隱藏了一個要你誠實的問題。也許因為你還沒想清楚答案是什麼。' },
+      reply: { echo: -5, dialogue: +18, stress: +12, clarity: +22,
+               fb: '你回答了——廢料問題，還是背叛感？誠實回答這個問題，比任何論點都更能推進對話。' },
+      like:  { echo: -5, dialogue: +10, stress: 0, clarity: +12,
+               fb: '你按讚了一個問倒你的問題。這說明你有能力分辨情緒和論點——即使你自己也混在一起。' },
+      skip:  { echo: +5, dialogue: -5, stress: +5, clarity: +5,
+               fb: '略過了。這個問題讓旁觀者自己去猜你到底在說什麼——廢料，還是心碎。' }
+    }
+  },
+  {
+    avatar: '📊', name: '事實糾錯者', stance: 'center', stanceLabel: '理性派',
+    time: '1天前', likes: 8, replies: 2,
+    text: '核一核二核四是藍的停的，核三是綠的停的。廢料問題不是重啟才有，廢料現在就在那裡。這不是在護航，是說清楚事實。',
+    situation: '📋 8讚，說的是事實，但破壞了情緒的一致性。',
+    actions: {
+      hide:  { echo: +15, dialogue: -20, stress: -5, clarity: -20,
+               fb: '你隱藏了一則說事實的留言。也許它打亂了你的敘事，或者你覺得「現在不是討論這個的時候」。' },
+      reply: { echo: -10, dialogue: +20, stress: +10, clarity: +20,
+               fb: '你回應了事實性留言。討論品質上升——但可能讓情緒中的人覺得你「太理性了」。' },
+      like:  { echo: -5, dialogue: +10, stress: 0, clarity: +15,
+               fb: '按讚一則事實留言，即使它讓你的情緒顯得有點失焦。這是誠實的選擇。' },
+      skip:  { echo: +5, dialogue: -10, stress: +5, clarity: -5,
+               fb: '略過了。事實沉在留言區裡，被情緒留言覆蓋。' }
+    }
+  },
+  {
+    avatar: '🔥', name: '最高讚留言', stance: 'deep_blue', stanceLabel: '深藍',
+    time: '20小時前', likes: 187, replies: 6,
+    text: '執政黨的衛生棉，用完即丟。不是今天的事了。',
+    situation: '🚨 187讚，被你隱藏前已廣泛流傳。它說中了很多人的感受——包括也許你自己的。',
+    actions: {
+      hide:  { echo: +22, dialogue: -8, stress: -15, clarity: +5,
+               fb: '你隱藏了它——就像真實貼文作者做的那樣。187讚說明這句話說中了什麼。你藏住了一面鏡子。問題是，那面鏡子照出的是誰？' },
+      reply: { echo: -18, dialogue: +10, stress: +30, clarity: +20,
+               fb: '你回覆了。這需要勇氣，也需要你已經有答案——你覺得自己是衛生棉嗎？還是你不是？' },
+      like:  { echo: 0, dialogue: 0, stress: -5, clarity: -20,
+               fb: '你按讚了一則可能在說你自己的留言。這讓人完全摸不清你的想法——也許那就是你的意思。' },
+      skip:  { echo: +5, dialogue: -5, stress: +10, clarity: +10,
+               fb: '略過了。它繼續存在，成為這篇貼文下最多人看到的留言。它說的事情，你心裡有沒有一個答案？' }
+    }
+  }
+  ],
+
+  // ── 核電廠附近居民：你發了猶豫不決的感性貼文 ──
+  resident: [
+    {
+      avatar: '🏙️', name: '北部網友', stance: 'deep_blue', stanceLabel: '深藍',
+      time: '1小時前', likes: 134, replies: 9,
+      text: '你住那裡你才不想開，台北要限電你又最大聲。你在保護的是誰？',
+      situation: '⚡ 134讚。南北矛盾的老梗——你的「住在附近」被當成自私的藉口。',
+      actions: {
+        hide:  { echo: +18, dialogue: -12, stress: -8, clarity: -5,
+                 fb: '你隱藏了最刺的留言。但它說中了一件事：你的地理位置，在別人眼中是政治籌碼，不是真實感受。' },
+        reply: { echo: -8, dialogue: +18, stress: +25, clarity: +20,
+                 fb: '你回覆了。解釋自己不是反對電力、只是不想承擔別人不願承擔的風險——這句話能不能說清楚，決定了這場對話的品質。' },
+        like:  { echo: 0, dialogue: +5, stress: -5, clarity: +8,
+                 fb: '你按讚了攻擊自己的留言。一種「我聽到了」的姿態——對方可能誤解，也可能感到意外。' },
+        skip:  { echo: +10, dialogue: -8, stress: +10, clarity: +5,
+                 fb: '你略過了。134讚的南北矛盾繼續掛在那裡，成為其他讀者對你這篇貼文的第一印象。' }
+      }
+    },
+    {
+      avatar: '😔', name: '倡議者借用', stance: 'deep_green', stanceLabel: '深綠',
+      time: '2小時前', likes: 48, replies: 2,
+      text: '謝謝你發聲。你的故事就是我們最好的反核論據。希望你加入我們的連署。',
+      situation: '📢 48讚。你的個人感受被倡議團體當作論述材料——你願意嗎？',
+      actions: {
+        hide:  { echo: -5, dialogue: +8, stress: 0, clarity: +15,
+                 fb: '你隱藏了把你「工具化」的留言。你在保護自己的故事，不讓它變成政治宣傳。' },
+        reply: { echo: -10, dialogue: +15, stress: +15, clarity: +20,
+                 fb: '你回覆了。「謝謝，但我不是反核，我只是困惑。」這句話說出來，你的故事才真正屬於你。' },
+        like:  { echo: +15, dialogue: -10, stress: -5, clarity: -15,
+                 fb: '你按讚了。現在你的貼文被歸入了倡議框架——你的猶豫消失了，剩下一個「反核居民」的標籤。' },
+        skip:  { echo: +5, dialogue: -5, stress: +8, clarity: +5,
+                 fb: '你略過了。倡議者的轉發讓你的貼文擴散，但擴散的版本裡你已經「選好邊」了。' }
+      }
+    },
+    {
+      avatar: '🔧', name: '核電工程師', stance: 'center', stanceLabel: '中間',
+      time: '3小時前', likes: 31, replies: 4,
+      text: '我在廠裡工作十五年。現代安全系統跟以前不一樣了。你說「不知道該怎麼想」，我也不知道怎麼跟你說。',
+      situation: '🔬 31讚。一個在廠裡工作的人留言了——他不是來辯論，是來說「我也很難」。',
+      actions: {
+        hide:  { echo: +5, dialogue: -10, stress: -5, clarity: -12,
+                 fb: '你隱藏了唯一一則「對話可能成真」的留言。也許那個困難你還沒準備好面對。' },
+        reply: { echo: -8, dialogue: +22, stress: +12, clarity: +25,
+                 fb: '你回覆了。這是留言區裡最難得的對話——兩個都「不知道怎麼想」的人，能不能說點什麼真實的？' },
+        like:  { echo: 0, dialogue: +12, stress: 0, clarity: +15,
+                 fb: '你按讚了。一個安靜的認可——「我看到你了」。這可能是這則留言裡最誠實的互動。' },
+        skip:  { echo: 0, dialogue: -8, stress: +8, clarity: +5,
+                 fb: '你略過了。31讚，已轉分享4次。那個工程師可能在等你。' }
+      }
+    },
+    {
+      avatar: '😤', name: '能源倡議者', stance: 'deep_blue', stanceLabel: '深藍',
+      time: '4小時前', likes: 67, replies: 6,
+      text: '你說「不知道該怎麼想」——這就是綠營洗腦的結果。事實是：核電安全、缺電才危險。',
+      situation: '💬 67讚。有人把你的困惑診斷成「被洗腦」——他沒有回應你的感受，只想糾正你的結論。',
+      actions: {
+        hide:  { echo: +14, dialogue: -10, stress: -8, clarity: -5,
+                 fb: '你隱藏了這則留言。他不是在對話，是在宣告。隱藏它讓你少一個噪音，但那個「你被洗腦」的指控還在別人心裡。' },
+        reply: { echo: -8, dialogue: +15, stress: +20, clarity: +18,
+                 fb: '你回覆了。「我不是被洗腦，我是真的住在那裡。」這句話能說出來，是這篇貼文最重要的自我定義。' },
+        like:  { echo: +10, dialogue: -8, stress: -10, clarity: -15,
+                 fb: '你按讚了診斷你「被洗腦」的人。現在你看起來同意他的說法。你的猶豫被吃掉了。' },
+        skip:  { echo: +8, dialogue: -5, stress: +10, clarity: +5,
+                 fb: '你略過了。67讚的留言繼續定義這篇貼文的氣氛——你的困惑在他的確定中變得越來越渺小。' }
+      }
+    },
+    {
+      avatar: '🤷', name: '隔壁鄉鎮居民', stance: 'center', stanceLabel: '中間',
+      time: '5小時前', likes: 19, replies: 1,
+      text: '我住核三廠十五公里外。說真的，我從來沒想過這件事。你這篇讓我開始想了。',
+      situation: '💡 19讚，被轉分享。你的貼文讓一個從不想這件事的人開始想了——這是你的影響力。',
+      actions: {
+        hide:  { echo: 0, dialogue: -8, stress: 0, clarity: -10,
+                 fb: '你隱藏了一則讓人開始思考的留言。你為什麼要這樣做？也許你覺得她說的還不夠深？' },
+        reply: { echo: -5, dialogue: +15, stress: +5, clarity: +15,
+                 fb: '你回覆了。「你願意開始想，比我能做的任何事都重要。」這句話讓這篇貼文值得了。' },
+        like:  { echo: 0, dialogue: +10, stress: 0, clarity: +12,
+                 fb: '你按讚了。19讚，但它讓一個人開始思考。這可能是這場留言戰裡最真實的進展。' },
+        skip:  { echo: 0, dialogue: 0, stress: +3, clarity: +8,
+                 fb: '你略過了。她還是開始想了——你不回也沒關係，但少了一個「繼續」的機會。' }
+      }
+    },
+    {
+      avatar: '🏆', name: '最高讚留言', stance: 'deep_green', stanceLabel: '深綠',
+      time: '30分鐘前', likes: 203, replies: 14,
+      text: '你說「不知道該怎麼想」。我覺得你知道。你只是不敢說。',
+      situation: '🔥 203讚，這是留言區最高讚。他沒有說你「反核」或「挺核」，他說你在逃避自己的感受。',
+      actions: {
+        hide:  { echo: +20, dialogue: -15, stress: -12, clarity: -18,
+                 fb: '你把最高讚隱藏了。也許因為他說中了什麼。但這則留言已經被截圖、被轉發——隱藏改變不了它的存在。' },
+        reply: { echo: -12, dialogue: +20, stress: +30, clarity: +30,
+                 fb: '你回覆了。如果你說出了真實的感受——這會是這篇貼文最有價值的一刻。如果你迴避，他的猜測就成真了。' },
+        like:  { echo: -5, dialogue: +10, stress: -5, clarity: +20,
+                 fb: '你按讚了。一個誠實的「你說得對」。203讚變成204讚——你承認了自己知道但不敢說的事。' },
+        skip:  { echo: +10, dialogue: -10, stress: +15, clarity: -5,
+                 fb: '你略過了。203讚的「你在逃避」繼續掛在最頂端。每個來看你貼文的人，第一眼都會看到它。' }
+      }
+    }
+  ],
+
+  // ── 能源線記者：你整理了五個無解問題 ──
+  journalist: [
+    {
+      avatar: '😠', name: '藍方讀者', stance: 'deep_blue', stanceLabel: '深藍',
+      time: '1小時前', likes: 91, replies: 7,
+      text: '「五個問題全部空白」是在說反對。你在幫誰洗地，大家都看得清楚。你不是記者，你是政治線的偽裝。',
+      situation: '⚡ 91讚。藍方把你的「五個問題」讀成反核立場，並指控你假裝中立。',
+      actions: {
+        hide:  { echo: +15, dialogue: -12, stress: -8, clarity: -8,
+                 fb: '你隱藏了這個指控。但它不只是攻擊——它提出了一個真實的問題：「列出問題」和「提出質疑」之間，你真的分得清楚嗎？' },
+        reply: { echo: -10, dialogue: +20, stress: +22, clarity: +22,
+                 fb: '你回覆了，解釋五個問題都是新聞稿上找不到答案的公開事實。這是新聞倫理的自我辯護——說得好是教育，說得差是爭辯。' },
+        like:  { echo: -5, dialogue: +8, stress: 0, clarity: +5,
+                 fb: '你按讚了指控你的人。這個動作讓他困惑了——他不確定你是在接受批評，還是在嘲諷他。' },
+        skip:  { echo: +8, dialogue: -8, stress: +10, clarity: +5,
+                 fb: '你略過了。91讚的「偽裝記者」指控繼續存在，成為這篇貼文的主要背景音。' }
+      }
+    },
+    {
+      avatar: '🌿', name: '綠方讀者', stance: 'deep_green', stanceLabel: '深綠',
+      time: '2小時前', likes: 63, replies: 4,
+      text: '五個問題全空白，結論還不夠明顯嗎？你為什麼不直說反對？記者裝中立就是在開後門給重啟。',
+      situation: '🌿 63讚。綠方認為你的「問題整理」是在替重啟核電做鋪墊，指控你給重啟開後門。',
+      actions: {
+        hide:  { echo: +12, dialogue: -10, stress: -5, clarity: -5,
+                 fb: '你隱藏了左邊的批評。你的「中立」現在在深綠眼中傾藍了，而你選擇不回應。' },
+        reply: { echo: -8, dialogue: +18, stress: +18, clarity: +20,
+                 fb: '你回覆了，說明記者的工作不是給結論而是呈現問題。說得清楚，這是新聞的力量；說不清楚，就是你承認了他的指控。' },
+        like:  { echo: -8, dialogue: +10, stress: 0, clarity: +10,
+                 fb: '你按讚了批評你開後門的人。一種知識上的誠信——「也許你說的值得想想」。' },
+        skip:  { echo: +5, dialogue: -8, stress: +8, clarity: +5,
+                 fb: '你略過了。兩邊都在罵你，你一個都不回——這在讀者眼中，是清高，還是心虛？' }
+      }
+    },
+    {
+      avatar: '🙏', name: '普通讀者', stance: 'center', stanceLabel: '中間',
+      time: '3小時前', likes: 27, replies: 0,
+      text: '謝謝整理。我終於知道哪些地方是真的沒有答案、哪些只是吵架。分享了。',
+      situation: '✨ 27讚，已轉分享。這是你這篇貼文真正達到的效果——有人因此搞懂了什麼。',
+      actions: {
+        hide:  { echo: +5, dialogue: -8, stress: 0, clarity: -10,
+                 fb: '你隱藏了感謝你的人。這裡沒有爭議，沒有攻擊——你為什麼要隱藏它？' },
+        reply: { echo: -5, dialogue: +12, stress: +3, clarity: +12,
+                 fb: '你感謝了他並說明可以繼續追哪幾個問題。這是讀者服務——記者最基本的，也最容易被遺忘的事。' },
+        like:  { echo: 0, dialogue: +10, stress: 0, clarity: +12,
+                 fb: '你按讚了。27讚的感謝繼續讓這篇貼文維持在「有用」的印象裡。' },
+        skip:  { echo: 0, dialogue: 0, stress: +3, clarity: +5,
+                 fb: '你略過了。他還是把你的報導分享出去了——你不回應，不影響他，但少了一個真實讀者的接觸。' }
+      }
+    },
+    {
+      avatar: '🤨', name: '同行記者', stance: 'center', stanceLabel: '中間',
+      time: '4小時前', likes: 44, replies: 5,
+      text: '你說「五個問題全部空白」——但核安審查其實有進度報告，你看過嗎？整理不完整就說全空白，這樣容易被攻擊。',
+      situation: '📊 44讚。同行在糾錯。他說的不是立場，是事實準確性——這才是最難回應的批評。',
+      actions: {
+        hide:  { echo: +15, dialogue: -15, stress: -8, clarity: -15,
+                 fb: '你隱藏了唯一指出事實錯誤的留言。如果他說的對，你的沉默只會讓這個錯誤繼續傳播。' },
+        reply: { echo: -10, dialogue: +25, stress: +15, clarity: +30,
+                 fb: '你回覆了，確認了核安審查的進度報告，並修正了表述。這是新聞倫理最高標準的展現——比任何對話都有價值。' },
+        like:  { echo: 0, dialogue: +15, stress: 0, clarity: +15,
+                 fb: '你按讚了批評你事實錯誤的同行。這是一種公開承認——讀者看到了你願意被糾正。' },
+        skip:  { echo: +8, dialogue: -10, stress: +8, clarity: -10,
+                 fb: '你略過了。44讚的事實糾錯沒有被回應——在讀者眼中，你默認了錯誤，或者你不敢面對同行的批評。' }
+      }
+    },
+    {
+      avatar: '😒', name: '一般留言者', stance: 'deep_green', stanceLabel: '深綠',
+      time: '5小時前', likes: 33, replies: 2,
+      text: '你以為你是誰？政府和電力公司的公開資料擺在那裡，你整理一下就叫「獨立報導」？隨便誰都能做。',
+      situation: '😏 33讚。有人在嗆你的工作沒有門檻、沒有價值——這是對記者身份最直接的挑戰。',
+      actions: {
+        hide:  { echo: +12, dialogue: -8, stress: -8, clarity: -5,
+                 fb: '你隱藏了嗆你的人。但他說的事有一個核心：如果「整理公開資料」就是報導，讀者為什麼需要記者？這個問題沒有消失。' },
+        reply: { echo: -8, dialogue: +18, stress: +20, clarity: +18,
+                 fb: '你回覆了，說明整理資料本身需要新聞判斷——哪些問題重要、哪些資料可信。說得清楚，這是記者存在的理由。' },
+        like:  { echo: 0, dialogue: +5, stress: -5, clarity: +8,
+                 fb: '你按讚了嗆你的人。一種「你說的有一部分是對的」的誠實——或者說，你也不確定自己的工作有沒有價值。' },
+        skip:  { echo: +5, dialogue: -5, stress: +10, clarity: 0,
+                 fb: '你略過了。33讚的「你以為你是誰」繼續掛在那裡，讓這篇貼文帶著一種「記者的傲慢」的隱隱標籤。' }
+      }
+    },
+    {
+      avatar: '🏆', name: '最高讚留言', stance: 'deep_blue', stanceLabel: '深藍',
+      time: '20分鐘前', likes: 178, replies: 11,
+      text: '五個問題，全部空白。好問題。那你問的這五個，哪一個你自己有答案？',
+      situation: '🔥 178讚，留言區最高讚。他沒有攻擊你的立場，他問的是：你整理問題，你自己有沒有立場？',
+      actions: {
+        hide:  { echo: +20, dialogue: -15, stress: -10, clarity: -20,
+                 fb: '你把最高讚隱藏了。這則留言問的不是立場——是記者存在的意義。你選擇不回答，它的截圖還是在外面流傳。' },
+        reply: { echo: -12, dialogue: +22, stress: +28, clarity: +30,
+                 fb: '你回覆了。「我有看法，但我的工作不是給答案。」或者「我不知道。」哪個版本才是真的？說出來，這篇貼文才算完整。' },
+        like:  { echo: -5, dialogue: +12, stress: -5, clarity: +18,
+                 fb: '你按讚了他。178讚變179讚——你承認這個問題問得好。讀者看到了一個願意被反問的記者。' },
+        skip:  { echo: +10, dialogue: -12, stress: +15, clarity: -8,
+                 fb: '你略過了。178讚的問題沒有被回答，留在最頂端。讀者開始認為：也許記者也不知道答案，只是比我們更會問問題。' }
+      }
+    }
+  ]
+};
+
+function renderStanceGrid() {
+  const grid = document.getElementById('stance-grid');
+  grid.innerHTML = '';
+  Object.values(POST_STANCES).forEach(s => {
+    const div = document.createElement('div');
+    div.className = `stance-select-card${selectedStance === s.id ? ' selected' : ''}`;
+    div.onclick = () => selectStance(s.id);
+    div.innerHTML = `
+      <div class="stance-card-header">
+        <div class="stance-card-emoji">${s.emoji}</div>
+        <div>
+          <div class="stance-card-name">${s.title}</div>
+          <span class="stance-card-tag" style="background:${s.tagBg};color:${s.tagColor};border:1px solid ${s.tagColor}40">${s.title}</span>
+        </div>
+      </div>
+      <div class="stance-card-post">你的貼文：${s.post}</div>
+      <div class="stance-card-desc">${s.desc}</div>
+    `;
+    grid.appendChild(div);
+  });
+}
+
+function selectStance(id) {
+  selectedStance = id;
+  document.getElementById('stance-grid').querySelectorAll('.stance-select-card').forEach((el, i) => {
+    el.classList.toggle('selected', Object.keys(POST_STANCES)[i] === id);
+  });
+}
+
+function startGame() {
+  currentRound = 0;
+  meters = { ...POST_STANCES[selectedStance].startMeters };
+  activeComments = COMMENT_SETS[selectedStance];
+  actions_log.length = 0;
+  trackPlay('ep2');
+  showScreen('screen-game');
+  loadComment();
+}
+
+function loadComment() {
+  const c = activeComments[currentRound];
+  const total = activeComments.length;
+
+  document.getElementById('round-info').textContent = `留言 ${currentRound + 1} / ${total}`;
+  document.getElementById('progress-fill').style.width = `${((currentRound + 1) / total) * 100}%`;
+
+  document.getElementById('c-avatar').textContent = c.avatar;
+  document.getElementById('c-name').textContent = c.name;
+  document.getElementById('c-time').textContent = c.time;
+  document.getElementById('c-text').textContent = c.text;
+  document.getElementById('c-likes').textContent = `👍 ${c.likes}`;
+  document.getElementById('c-replies').textContent = `💬 ${c.replies} 則回覆`;
+  document.getElementById('c-hidden-badge').textContent = '';
+
+  const stanceTag = document.getElementById('c-stance-tag');
+  stanceTag.textContent = c.stanceLabel;
+  stanceTag.className = `commenter-stance ${c.stance === 'deep_blue' ? 'stance-db' : c.stance === 'deep_green' ? 'stance-dg' : 'stance-mid'}`;
+
+  document.getElementById('situation-label').textContent = c.situation;
+
+  // Reset buttons
+  ['hide','reply','like','skip'].forEach(a => {
+    document.getElementById(`btn-${a}`).className = 'action-btn';
+  });
+  document.getElementById('feedback-box').className = 'feedback-box';
+  document.getElementById('next-btn').className = 'next-btn';
+  updateMeters();
+}
+
+function doAction(action) {
+  const c = activeComments[currentRound];
+  const fx = c.actions[action];
+  const oldMeters = { ...meters };
+
+  Object.entries(fx).forEach(([k, v]) => {
+    if (k !== 'fb') meters[k] = Math.max(0, Math.min(100, meters[k] + v));
+  });
+
+  actions_log[currentRound] = action;
+
+  ['hide','reply','like','skip'].forEach(a => {
+    document.getElementById(`btn-${a}`).className = 'action-btn disabled';
+  });
+  document.getElementById(`btn-${action}`).className = `action-btn selected-${action}`;
+
+  const fb = document.getElementById('feedback-box');
+  fb.textContent = `💡 ${fx.fb}`;
+  fb.classList.add('show');
+
+  document.getElementById('next-btn').classList.add('show');
+  updateMeters(oldMeters);
+}
+
+function nextRound() {
+  currentRound++;
+  if (currentRound >= activeComments.length) showResult();
+  else loadComment();
+}
+
+function updateMeters(old) {
+  ['echo','dialogue','stress','clarity'].forEach(k => {
+    const valEl = document.getElementById(`m-${k}`);
+    valEl.textContent = meters[k];
+    document.getElementById(`fill-${k}`).style.width = meters[k] + '%';
+    if (old && meters[k] !== old[k]) {
+      const d = meters[k] - old[k];
+      valEl.classList.remove('bumping');
+      void valEl.offsetWidth;
+      valEl.classList.add('bumping');
+      setTimeout(() => valEl.classList.remove('bumping'), 400);
+      const badge = document.createElement('span');
+      badge.className = 'delta-badge';
+      badge.textContent = (d > 0 ? '+' : '') + d;
+      badge.style.color = d > 0 ? '#4ade80' : '#f87171';
+      valEl.parentElement.appendChild(badge);
+      setTimeout(() => badge.remove(), 800);
+    }
+  });
+}
+
+function showResult() {
+  const echo = meters.echo;
+  const circle = document.getElementById('echo-circle');
+  const title = document.getElementById('echo-title');
+  const desc = document.getElementById('echo-desc');
+
+  document.getElementById('echo-pct').textContent = echo + '%';
+
+  if (echo >= 70) {
+    circle.style.borderColor = '#f97316';
+    title.textContent = '同溫層：厚如城牆';
+    desc.textContent = '你的留言區現在是一個舒適但封閉的空間。批評的聲音都被隔絕了。你的支持者很安心，但你沒有機會聽到不同的聲音。這是島上很多貼文的命運。';
+  } else if (echo >= 40) {
+    circle.style.borderColor = '#fbbf24';
+    title.textContent = '同溫層：中等厚度';
+    desc.textContent = '你保留了一些批評聲音，但也做了一些保護性的決定。這是大多數人的做法——不完全封閉，但也不完全開放。';
+  } else {
+    circle.style.borderColor = '#22d3ee';
+    title.textContent = '同溫層：相對薄透';
+    desc.textContent = '你讓多元聲音留在你的貼文下。這讓討論更複雜，也讓你承受更多壓力。但你的貼文呈現了比較真實的島上輿論生態。';
+  }
+
+  // Insights
+  const hideCount = actions_log.filter(a => a === 'hide').length;
+  const replyCount = actions_log.filter(a => a === 'reply').length;
+  const likeCount = actions_log.filter(a => a === 'like').length;
+
+  const insights = [];
+  if (hideCount >= 3) insights.push({ icon: '🚫', text: `你隱藏了 ${hideCount} 則留言。真實貼文作者隱藏了類似數量的留言——尤其是讚數最高的那幾則。` });
+  if (replyCount >= 2) insights.push({ icon: '💬', text: `你選擇回覆 ${replyCount} 則留言。每次回覆都讓你更暴露，但也讓對話繼續。` });
+  if (hideCount === 0) insights.push({ icon: '🌊', text: '你沒有隱藏任何留言。你的貼文是一個開放的戰場——或者說，一個真實的公共廣場。' });
+  insights.push({ icon: '📊', text: `你的對話品質：${meters.dialogue}分。${meters.dialogue > 50 ? '你讓一些不同意見留了下來。' : '你的留言區趨向同質化。'}` });
+  insights.push({ icon: '🔭', text: `研究發現：被隱藏的留言往往是讚數最高的。你的每個「隱藏」決定，都在塑造其他人看到的「現實」。` });
+
+  const list = document.getElementById('insights-list');
+  list.innerHTML = insights.map(i => `<div class="insight-item"><span class="insight-icon">${i.icon}</span><span>${i.text}</span></div>`).join('');
+
+  setTimeout(() => {
+    ['echo','dialogue','stress','clarity'].forEach(k => {
+      document.getElementById(`r-${k}`).style.width = meters[k] + '%';
+      document.getElementById(`rn-${k}`).textContent = meters[k];
+    });
+  }, 300);
+
+  const gameUrl = 'https://scatjay.github.io/nuke-or-not/ep2-k9r/';
+  let shareQuip;
+  if (echo >= 70) {
+    shareQuip = `管了615則留言，我的同溫層厚度 ${echo}%。\n批評的聲音都隱藏了。支持者很安心，我也很安心。\n這不是我的問題——島上每個貼文作者都在做一樣的事。\n你也會嗎？`;
+  } else if (echo >= 40) {
+    shareQuip = `615則留言，同溫層厚度 ${echo}%。\n我保留了一些批評，也隱藏了一些，說實話我也搞不清楚自己在保護誰。\n這大概就是「普通人」管留言的方式。`;
+  } else {
+    shareQuip = `管了615則留言，同溫層只有 ${echo}%——我把不舒服的聲音都留下來了。\n貼文壓力 ${meters.stress} 分。對話品質 ${meters.dialogue} 分。\n這不是什麼美德，叫做自找麻煩。`;
+  }
+  document.getElementById('share-text').textContent =
+    `${shareQuip}\n\n→ ${gameUrl}\n#鬼島鄉民測驗 #核電篇`;
+
+  showScreen('screen-result');
+}
+
+function copyShare() {
+  const text = document.getElementById('share-text').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('.share-btn.copy');
+    btn.textContent = '✅ 已複製！';
+    setTimeout(() => btn.textContent = '複製文字', 2000);
+  });
+}
+function shareFB() {
+  window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('https://scatjay.github.io/nuke-or-not/ep2-k9r/')}`, '_blank');
+}
+function shareLINE() {
+  const msg = document.getElementById('share-text').textContent;
+  window.open(`https://line.me/R/msg/text/?${encodeURIComponent(msg)}`, '_blank');
+}
+// ── PLAY COUNTER ──
+const SB_URL = '';
+const SB_KEY = '';
+
+async function trackPlay(game) {
+  const k = `ghost_plays_${game}`;
+  localStorage.setItem(k, String(parseInt(localStorage.getItem(k) || '0', 10) + 1));
+  if (SB_URL && SB_KEY) {
+    try {
+      await fetch(`${SB_URL}/rest/v1/rpc/increment_play`, {
+        method: 'POST',
+        headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ gid: game })
+      });
+    } catch(e) {}
+  }
+}
+
+function retry() {
+  currentRound = 0;
+  meters = { ...POST_STANCES[selectedStance].startMeters };
+  actions_log.length = 0;
+  showScreen('screen-intro');
+}
+
+// Init
+renderStanceGrid();
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>

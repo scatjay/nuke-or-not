@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>核廢料放你家｜鬼島核電篇 EP.3</title>
+<meta property="og:title" content="核廢料放你家｜你敢開公聽會嗎？">
+<meta property="og:description" content="你是能源部長，必須選一個地點召開公聽會。五個聲音，四種應對策略。沒有完美解。">
+<meta property="og:image" content="https://scatjay.github.io/nuke-or-not/ep3-w4x/cover.png">
+<meta property="og:url" content="https://scatjay.github.io/nuke-or-not/ep3-w4x/">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+  :root {
+    --yellow: #d97706;
+    --yellow-light: #fde68a;
+    --green: #16a34a;
+    --red: #dc2626;
+    --blue: #2563eb;
+    --gray: #6b7280;
+    --dark: #0f172a;
+    --darker: #020617;
+    --card: #1e293b;
+    --card2: #162032;
+    --border: #334155;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans TC', '微軟正黑體', sans-serif;
+    background: var(--darker); color: var(--text);
+    min-height: 100vh;
+    display: flex; align-items: flex-start; justify-content: center;
+    padding: 16px;
+  }
+  #app { width: 100%; max-width: 600px; padding-top: 16px; }
+  .screen { display: none; }
+  .screen.active { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+
+  .series-badge {
+    display: table; margin: 0 auto 12px; background: var(--border); color: var(--muted);
+    font-size: 0.72rem; padding: 3px 10px; border-radius: 20px;
+  }
+  .intro-header { text-align: center; padding: 24px 0 20px; }
+  .game-title { font-size: 1.9rem; font-weight: 800; margin-bottom: 8px; line-height: 1.2; }
+  .game-subtitle { color: var(--muted); font-size: 0.9rem; margin-bottom: 16px; }
+  .briefing {
+    background: var(--card2); border-left: 3px solid var(--yellow);
+    padding: 14px 16px; border-radius: 0 8px 8px 0;
+    font-size: 0.88rem; line-height: 1.8; margin-bottom: 16px;
+  }
+  .briefing strong { color: var(--yellow-light); }
+
+  /* BUTTONS */
+  .btn {
+    display: block; width: 100%; padding: 14px 20px;
+    border: none; border-radius: 10px;
+    font-size: 1rem; font-weight: 700;
+    cursor: pointer; transition: all 0.15s; font-family: inherit;
+  }
+  .btn-primary { background: var(--yellow); color: #000; }
+  .btn-primary:hover:not(:disabled) { background: #b45309; color: #fff; }
+  .btn-primary:disabled { background: #374151; color: var(--muted); cursor: default; }
+  .btn-secondary { background: transparent; border: 1px solid var(--border); color: var(--muted); }
+  .btn-secondary:hover { border-color: var(--yellow); color: var(--text); }
+
+  /* ── ROLE SELECTION ── */
+  .role-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+  .role-card {
+    background: var(--card); border: 2px solid var(--border);
+    border-radius: 12px; padding: 16px; cursor: pointer; transition: all 0.15s;
+  }
+  .role-card:hover { border-color: var(--yellow); }
+  .role-card.selected { border-color: var(--yellow); background: rgba(217,119,6,0.08); }
+  .role-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+  .role-emoji { font-size: 1.8rem; flex-shrink: 0; }
+  .role-name { font-size: 1.05rem; font-weight: 800; }
+  .role-tag {
+    display: inline-block; font-size: 0.68rem; font-weight: 700;
+    padding: 2px 8px; border-radius: 20px; margin-top: 2px;
+  }
+  .role-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.6; margin-bottom: 10px; }
+  .role-stats { display: flex; gap: 8px; font-size: 0.72rem; }
+  .role-stat { background: var(--card2); border: 1px solid var(--border); border-radius: 6px; padding: 4px 8px; }
+  .role-stat span { color: var(--muted); }
+  /* role indicator in hearing */
+  .role-badge-inline {
+    display: inline-block; font-size: 0.7rem; font-weight: 700;
+    padding: 2px 8px; border-radius: 12px; background: rgba(217,119,6,0.15);
+    color: var(--yellow); border: 1px solid rgba(217,119,6,0.3);
+    margin-left: 8px; vertical-align: middle;
+  }
+
+  /* ── SITE SELECTION ── */
+  .phase-title { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+  .phase-sub { font-size: 0.82rem; color: var(--muted); margin-bottom: 16px; line-height: 1.6; }
+  .site-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+  .site-option {
+    background: var(--card); border: 2px solid var(--border);
+    border-radius: 12px; padding: 14px 16px; cursor: pointer;
+    transition: all 0.15s;
+  }
+  .site-option:hover { border-color: var(--yellow); }
+  .site-option.selected { border-color: var(--yellow); background: rgba(217,119,6,0.08); }
+  .site-option.danger-opt { border-color: #7f1d1d; }
+  .site-option.danger-opt:hover { border-color: var(--red); }
+  .site-option.danger-opt.selected { border-color: var(--red); background: rgba(220,38,38,0.08); }
+  .site-opt-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
+  .site-opt-name { font-size: 0.97rem; font-weight: 700; }
+  .site-opt-note { font-size: 0.72rem; color: var(--muted); }
+  .site-opt-warn { font-size: 0.7rem; color: var(--red); background: rgba(220,38,38,0.12); padding: 2px 8px; border-radius: 20px; }
+  .site-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+  .pill { font-size: 0.68rem; padding: 2px 7px; border-radius: 20px; border: 1px solid; }
+  .pill.geo { border-color: #4ade80; color: #4ade80; }
+  .pill.resist { border-color: #f87171; color: #f87171; }
+  .pill.cost { border-color: #fbbf24; color: #fbbf24; }
+
+  /* ── HEARING SCREEN ── */
+  .hearing-header { margin-bottom: 14px; }
+  .hearing-location {
+    font-size: 0.78rem; color: var(--yellow);
+    font-weight: 700; letter-spacing: 0.05em; margin-bottom: 4px;
+  }
+  .hearing-title { font-size: 1.1rem; font-weight: 800; margin-bottom: 12px; }
+
+  /* Meters */
+  .meters { display: flex; gap: 10px; margin-bottom: 16px; }
+  .meter { flex: 1; }
+  .meter-lbl { display: flex; justify-content: space-between; font-size: 0.73rem; color: var(--muted); margin-bottom: 4px; }
+  .meter-lbl .mv { font-weight: 700; color: var(--text); }
+  .meter-track { height: 7px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .meter-fill { height: 100%; border-radius: 4px; transition: width 0.4s ease; }
+  .mf-opinion { background: linear-gradient(90deg, #16a34a, #4ade80); }
+  .mf-trust   { background: linear-gradient(90deg, #2563eb, #60a5fa); }
+  .mf-political { background: linear-gradient(90deg, #d97706, #fbbf24); }
+  .mf-low { background: linear-gradient(90deg, #dc2626, #f97316); }
+
+  /* Progress */
+  .round-indicator { display: flex; gap: 6px; margin-bottom: 16px; align-items: center; }
+  .round-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--border); border: 1px solid var(--border); transition: all 0.2s;
+  }
+  .round-dot.done { background: var(--yellow); border-color: var(--yellow); }
+  .round-dot.current { background: transparent; border-color: var(--yellow); box-shadow: 0 0 6px var(--yellow); }
+  .round-label { font-size: 0.72rem; color: var(--muted); margin-left: 4px; }
+
+  /* Speaker card */
+  .speaker-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px; margin-bottom: 14px;
+  }
+  .speaker-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .speaker-avatar {
+    font-size: 1.5rem; width: 40px; height: 40px; display: flex;
+    align-items: center; justify-content: center; background: var(--card2);
+    border-radius: 50%; border: 1px solid var(--border);
+  }
+  .speaker-info {}
+  .speaker-role { font-size: 0.8rem; font-weight: 700; }
+  .speaker-stance { font-size: 0.7rem; color: var(--muted); margin-top: 1px; }
+  .speaker-text {
+    font-size: 0.88rem; line-height: 1.8; color: var(--text);
+    border-left: 2px solid var(--border); padding-left: 12px;
+  }
+
+  /* ── Speaker card entrance ── */
+  @keyframes speakerEnter {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes avatarPop {
+    0%   { transform: scale(0.7); opacity: 0; }
+    60%  { transform: scale(1.12); opacity: 1; }
+    100% { transform: scale(1); }
+  }
+  @keyframes textReveal {
+    from { opacity: 0; transform: translateX(-6px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes responseSlide {
+    from { opacity: 0; transform: translateX(-10px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  .speaker-card.entering { animation: speakerEnter 0.36s ease forwards; }
+  .speaker-card.entering .speaker-avatar { animation: avatarPop 0.4s ease 0.1s both; }
+  .speaker-card.entering .speaker-text  { animation: textReveal 0.4s ease 0.18s both; }
+
+  /* Response choices */
+  .response-label { font-size: 0.75rem; color: var(--muted); font-weight: 600; margin-bottom: 8px; letter-spacing: 0.04em; }
+  .response-options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+  .response-btn {
+    padding: 10px 12px; border-radius: 8px;
+    border: 1px solid var(--border); background: var(--card2);
+    color: var(--text); font-size: 0.82rem; font-family: inherit;
+    cursor: pointer; transition: border-color 0.15s, color 0.15s, background 0.15s;
+    text-align: left; line-height: 1.4;
+    opacity: 0; animation: responseSlide 0.3s ease forwards;
+  }
+  .response-btn:hover { border-color: var(--yellow); color: var(--yellow-light); }
+  .response-btn .rb-type { font-size: 0.68rem; color: var(--muted); margin-bottom: 3px; font-weight: 700; letter-spacing: 0.03em; }
+  .response-btn:hover .rb-type { color: var(--yellow); }
+
+  /* Feedback banner */
+  .feedback-banner {
+    display: none; background: var(--card2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 12px 14px; margin-bottom: 12px;
+    font-size: 0.83rem; line-height: 1.7;
+  }
+  .feedback-banner.visible { display: block; animation: fadeIn 0.2s ease; }
+  .feedback-banner .fb-effect { font-size: 0.75rem; color: var(--yellow); font-weight: 700; margin-bottom: 5px; }
+
+  /* RESULT */
+  .result-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+  .result-top { font-size: 0.9rem; color: var(--muted); margin-bottom: 4px; }
+  .result-type { font-size: 1.55rem; font-weight: 800; color: var(--yellow); margin-bottom: 12px; }
+  .result-desc { font-size: 0.9rem; line-height: 1.8; color: var(--muted); margin-bottom: 18px; }
+  .score-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 18px; }
+  .score-box { background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 10px; text-align: center; }
+  .score-box .sv { font-size: 1.4rem; font-weight: 800; margin-bottom: 2px; }
+  .score-box .sl { font-size: 0.68rem; color: var(--muted); }
+  .comparison-box {
+    background: var(--card2); border: 1px solid #d97706;
+    border-radius: 8px; padding: 14px; margin-bottom: 16px;
+    font-size: 0.84rem; line-height: 1.8;
+  }
+  .comparison-box .ct { font-size: 0.73rem; color: var(--yellow); font-weight: 700; margin-bottom: 6px; letter-spacing: 0.05em; }
+  .strategy-list { margin-bottom: 18px; }
+  .strategy-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 0.84rem;
+  }
+  .strategy-row:last-child { border-bottom: none; }
+  .strategy-row .st-count { font-weight: 700; color: var(--yellow); }
+  .share-row { display: flex; gap: 8px; margin-bottom: 10px; }
+  .share-btn {
+    flex: 1; padding: 10px; border-radius: 8px; border: none;
+    font-size: 0.82rem; font-weight: 700; cursor: pointer; font-family: inherit;
+  }
+  .share-fb { background: #1877f2; color: #fff; }
+  .share-line { background: #00c300; color: #fff; }
+  .share-copy { background: var(--card2); color: var(--text); border: 1px solid var(--border); }
+
+  /* EP NAV */
+  .game-footer { font-size: 0.72rem; color: #475569; line-height: 1.8; margin-top: 12px; text-align: center; }
+  .ep-nav { display: flex; gap: 8px; margin-top: 8px; }
+  .ep-link {
+    flex: 1; padding: 10px; background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; text-align: center; font-size: 0.78rem;
+    color: var(--muted); text-decoration: none; transition: all 0.15s; display: block;
+  }
+  .ep-link:hover { border-color: var(--yellow); color: var(--text); }
+  .ep-link.current { border-color: var(--yellow); color: var(--yellow); font-weight: 600; }
+  .ep-link.released { border-color: #22c55e; color: #22c55e; }
+  .ep-link.released:hover { border-color: #4ade80; color: #4ade80; }
+  .ep-link.coming-soon { opacity: 0.38; border-style: dashed; cursor: default; pointer-events: none; font-style: italic; }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ═══ INTRO ═══ -->
+  <div id="screen-intro" class="screen active">
+    <div class="intro-header">
+      <div class="series-badge">鬼島鄉民測驗 · 核電篇 EP.3</div>
+      <h1 class="game-title">核廢料放你家？</h1>
+      <p class="game-subtitle">選擇你的身份，召開公聽會。</p>
+    </div>
+
+    <div class="briefing">
+      島上核電廠的廢料儲存設施即將飽和。必須選定一個地點，召開<strong>公聽會</strong>，說服當地居民接受。<br><br>
+      <strong>五個聲音</strong>會依序上台質詢你。每一次你的回應，都會影響<strong>民意接受度</strong>、<strong>社會信任</strong>，以及你的<strong>政治存活</strong>。<br><br>
+      沒有人會滿意。問題是，你能讓多少人勉強點頭。
+    </div>
+
+    <button class="btn btn-primary" onclick="goToRoleSelect()">選擇身份，開始 →</button>
+
+    <div class="game-footer">
+      公聽會模擬機制 · 場景參照真實能源政策爭議<br>
+      <div class="ep-nav">
+        <a class="ep-link released" href="../ep1/">✓ EP.1 臉腫了嗎？</a>
+        <a class="ep-link released" href="../ep2-k9r/">✓ EP.2 您有615則留言</a>
+        <a class="ep-link current" href="#">▶ EP.3 核廢料放你家</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ ROLE SELECT ═══ -->
+  <div id="screen-role" class="screen">
+    <div class="series-badge">鬼島鄉民測驗 · 核電篇 EP.3</div>
+    <div class="phase-title">你是誰？</div>
+    <p class="phase-sub">不同身份有不同的籌碼，也有不同的死法。</p>
+    <div class="role-grid" id="role-grid"></div>
+    <button class="btn btn-primary" id="role-confirm-btn" onclick="confirmRole()" disabled>確認身份，選擇開會地點 →</button>
+    <div style="margin-top:10px;">
+      <button class="btn btn-secondary" onclick="showScreen('screen-intro')">← 返回</button>
+    </div>
+  </div>
+
+  <!-- ═══ SITE SELECT ═══ -->
+  <div id="screen-site" class="screen">
+    <div class="series-badge">鬼島鄉民測驗 · 核電篇 EP.3</div>
+    <div class="phase-title">你要在哪裡召開公聽會？</div>
+    <p class="phase-sub">選定地點後，當地居民代表將依序發言。你的選擇將決定你面對的是哪些聲音。</p>
+
+    <div class="site-grid" id="site-grid"></div>
+
+    <button class="btn btn-primary" id="site-confirm-btn" onclick="confirmSite()" disabled>
+      確認選址，召開公聽會 →
+    </button>
+
+    <div class="game-footer" style="margin-top:12px;">
+      地質安全越高，技術上越適合；抗議程度越高，公聽會越難過。
+    </div>
+  </div>
+
+  <!-- ═══ HEARING ═══ -->
+  <div id="screen-hearing" class="screen">
+    <div class="series-badge">鬼島鄉民測驗 · 核電篇 EP.3</div>
+
+    <div class="hearing-header">
+      <div class="hearing-location" id="hearing-location-label">📍 地點：</div>
+      <div class="hearing-title">發言人上台陳述 <span class="role-badge-inline" id="role-badge-inline"></span></div>
+    </div>
+
+    <div class="meters">
+      <div class="meter">
+        <div class="meter-lbl"><span>民意接受度</span><span class="mv" id="m-opinion-val">30</span></div>
+        <div class="meter-track"><div class="meter-fill mf-opinion" id="m-opinion" style="width:30%"></div></div>
+      </div>
+      <div class="meter">
+        <div class="meter-lbl"><span>社會信任</span><span class="mv" id="m-trust-val">50</span></div>
+        <div class="meter-track"><div class="meter-fill mf-trust" id="m-trust" style="width:50%"></div></div>
+      </div>
+      <div class="meter">
+        <div class="meter-lbl"><span>政治存活</span><span class="mv" id="m-political-val">60</span></div>
+        <div class="meter-track"><div class="meter-fill mf-political" id="m-political" style="width:60%"></div></div>
+      </div>
+    </div>
+
+    <div class="round-indicator" id="round-dots"></div>
+
+    <div class="speaker-card" id="speaker-card"></div>
+
+    <div class="response-label">你的回應策略：</div>
+    <div class="response-options" id="response-options"></div>
+
+    <div class="feedback-banner" id="feedback-banner">
+      <div class="fb-effect" id="feedback-effect"></div>
+      <div id="feedback-text"></div>
+    </div>
+
+    <button class="btn btn-primary" id="next-btn" onclick="nextRound()" style="display:none">
+      下一位發言人 →
+    </button>
+  </div>
+
+  <!-- ═══ RESULT ═══ -->
+  <div id="screen-result" class="screen">
+    <div class="series-badge">鬼島鄉民測驗 · 核電篇 EP.3</div>
+    <div id="result-content"></div>
+    <div class="game-footer">
+      府城數位人文實驗室<br>
+      場景參照島上能源政策爭議
+      <div class="ep-nav">
+        <a class="ep-link released" href="../ep1/">✓ EP.1 臉腫了嗎？</a>
+        <a class="ep-link released" href="../ep2-k9r/">✓ EP.2 您有615則留言</a>
+        <a class="ep-link current" href="#">▶ EP.3 核廢料放你家</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ════════════════════════════════════════
+// SITE DATA
+// ════════════════════════════════════════
+const SITES = [
+  {
+    id: 'north',
+    name: '北境都會區',
+    note: '島上政經中心，舊電廠鄰近，人口超過全島三成',
+    geoScore: 42, resistLevel: '極高', costLevel: '★★★★★',
+    pills: ['地質安全 42分', '抗議程度 極高', '政治成本 最高'],
+    pillTypes: ['geo', 'resist', 'cost'],
+    isSpecial: false
+  },
+  {
+    id: 'midnorth',
+    name: '北港工業帶',
+    note: '半導體與重工業重鎮，選民對設施有一定接受度，屬搖擺選區',
+    geoScore: 58, resistLevel: '中高', costLevel: '★★★',
+    pills: ['地質安全 58分', '抗議程度 中高', '政治成本 中'],
+    pillTypes: ['geo', 'resist', 'cost'],
+    isSpecial: false
+  },
+  {
+    id: 'central',
+    name: '中洲糧倉帶',
+    note: '島上最大農業平原，稻米主產區，地下水系脆弱，糧食安全疑慮高',
+    geoScore: 55, resistLevel: '高', costLevel: '★★★',
+    pills: ['地質安全 55分', '抗議程度 高', '政治成本 中'],
+    pillTypes: ['geo', 'resist', 'cost'],
+    isSpecial: false
+  },
+  {
+    id: 'east',
+    name: '東嶺山地帶',
+    note: '花崗岩地質，板塊穩定，技術評估最佳選址，但原住民族聚居',
+    geoScore: 87, resistLevel: '中高', costLevel: '★★★★',
+    pills: ['地質安全 87分 ⭐', '抗議程度 中高', '政治成本 高'],
+    pillTypes: ['geo', 'resist', 'cost'],
+    isSpecial: false
+  },
+  {
+    id: 'island',
+    name: '幽嶼（黑潮族傳統領域）',
+    note: '離島孤嶼，黑潮族世居千年，已在不知情下承載低階廢料逾四十年',
+    geoScore: 48, resistLevel: '極端', costLevel: '★★★★★+',
+    pills: ['地質安全 48分', '抗議程度 極端', '政治成本 最高+'],
+    pillTypes: ['geo', 'resist', 'cost'],
+    isSpecial: true
+  }
+];
+
+// ════════════════════════════════════════
+// SPEAKERS PER SITE
+// Each site has 5 speakers with unique statements
+// ════════════════════════════════════════
+const SPEAKERS_BY_SITE = {
+  north: [
+    {
+      avatar: '🧓', role: '北境都會區居民自救會代表', stance: '堅決反對',
+      text: '請問部長，您的官邸在哪裡？您有沒有想過讓自己的孩子住在核廢料儲存設施旁邊三十年？我們不是反核電，我們是反對這種「廢料放別人家」的雙重標準。'
+    },
+    {
+      avatar: '🏭', role: '北境地區工商聯合會', stance: '有條件反對',
+      text: '我們不是不理解國家政策的必要性。但你有沒有算過，一旦這個消息公告，北境的房地產跌幾成？有多少企業要撤資？光補償金是不夠的，我們要的是完整的影響評估和退場機制。'
+    },
+    {
+      avatar: '🌿', role: '環境權益促進聯盟', stance: '強烈反對',
+      text: '部長，就算你給再多錢，核廢料的半衰期是二萬四千年。二萬四千年——請問你的「監管保障」能承諾幾百年就好嗎？我們的子孫沒有辦法投票拒絕你今天的決定。'
+    },
+    {
+      avatar: '🔬', role: '核廢料管理技術審議委員', stance: '技術中立',
+      text: '從純粹的地質角度，北境地區的板岩基盤確實存在斷層風險，我必須據實以報。但我也必須說：所有的地點都有不同程度的地質問題。技術層面，我們需要更完整的鑽探資料，目前選址的科學根據是不足的。'
+    },
+    {
+      avatar: '🗳️', role: '北境縣長', stance: '公開反對',
+      text: '部長，我是選出來的，我有責任代表選民說這句話：北境不接受。如果你要用行政命令強推，我們就訴諸司法、訴諸公投。我不是來這裡配合你做政治秀的。'
+    }
+  ],
+  midnorth: [
+    {
+      avatar: '⚙️', role: '北港工業區工會代表', stance: '要求補償',
+      text: '說實話，我們這裡的工人已經習慣和各種設施共存了。但我想知道的是：這個設施帶來的工作機會是什麼？管理費用、監測費用，有多少要留在地方？我們不是無條件同意，我們要談條件。'
+    },
+    {
+      avatar: '🌿', role: '北港水源地守護聯盟', stance: '強烈反對',
+      text: '你知道北港有多少人喝地下水嗎？核廢料的滲漏風險就算只有萬分之一，對這裡的居民來說就是百分之百的威脅。你的技術保障書能保障幾代人？我只問你這一個問題。'
+    },
+    {
+      avatar: '👨‍🔬', role: '核廢料管理技術審議委員', stance: '技術中立',
+      text: '北港工業帶的地質條件中等，但這裡有豐富的地下水脈，這是相當嚴峻的挑戰。我必須指出，國際標準對於地下水豐沛地區的核廢料儲存有很高的要求，目前的設計需要大幅加強隔離工程。'
+    },
+    {
+      avatar: '🏘️', role: '北港在地耆老', stance: '無奈接受',
+      text: '我已經七十八歲了。政府的事我管不了太多。但我就希望你能告訴我一件事：這個東西，在我死之前，能安全嗎？不用保證一萬年，就問你：五十年，你能保證嗎？'
+    },
+    {
+      avatar: '🗳️', role: '北港縣長', stance: '政治周旋',
+      text: '部長，在公開場合我不能說同意。但如果回饋基金的比例、就業保障、地方建設承諾可以談，我們可以繼續溝通。我不是在為你背書，我是在告訴你談判的空間在哪裡。'
+    }
+  ],
+  central: [
+    {
+      avatar: '🌾', role: '中洲農業協進會理事長', stance: '強烈反對',
+      text: '我種了四十年的田。你現在告訴我，我旁邊要放核廢料？輻射污染農地，不只是我這一代的事，是整個中洲糧倉的末日。以後誰還敢買我們的米？你賠得起島上人的飯碗嗎？'
+    },
+    {
+      avatar: '💧', role: '中洲地下水監測站研究員', stance: '技術憂慮',
+      text: '我必須提出數據：中洲平原的地下水位離地表平均只有八公尺，滲透率是全島最高的地區之一。任何儲存設施的洩漏，將在極短時間內進入灌溉水源。這不是政治問題，這是水文地質的基本事實。'
+    },
+    {
+      avatar: '🌿', role: '環境權益促進聯盟', stance: '強烈反對',
+      text: '糧食安全和核廢料，你要我們選哪一個？這根本是在強迫農業區做出不可能的犧牲。我們要求立即終止中洲選址，並且公開所有地質調查數據，讓公民自己判斷。'
+    },
+    {
+      avatar: '🏘️', role: '中洲農民代表（三代務農）', stance: '無力反對',
+      text: '政府說什麼，我們阻擋得了嗎？但我就是要問一句：為什麼每次這種東西，都放在農民頭上？放在工廠旁邊你們不敢，放在都市你們不敢，就知道農村沒人保護。'
+    },
+    {
+      avatar: '🗳️', role: '中洲縣長', stance: '明確反對',
+      text: '我今天到場，是為了正式告知：中洲縣政府不同意這個選址。我們將動用一切法律手段。你要強推，我們就讓這件事成為下次選舉最大的議題。'
+    }
+  ],
+  east: [
+    {
+      avatar: '🏔️', role: '東嶺原住民族部落大會發言人', stance: '尊嚴抗議',
+      text: '這片土地是我們祖先的獵場，是我們語言活著的地方。你說「地質條件最好」，但你有沒有問過我們？我們的「同意」不是形式，不是你通知我們就算。沒有我們的自由事前知情同意，這個選址就是侵權。'
+    },
+    {
+      avatar: '🔬', role: '核廢料管理技術審議委員', stance: '技術支持，但有條件',
+      text: '東嶺的花崗岩地質，是目前島上最接近國際標準的選址條件。但我必須強調：技術可行不等於可以跳過程序。完整的鑽探勘查至少需要五到十年，在此之前，任何選址公告都是草率的。'
+    },
+    {
+      avatar: '🌿', role: '東嶺環境法律援助中心', stance: '法律抗議',
+      text: '我們要提醒部長：根據現行法規，原住民族土地的開發需要取得部落會議決議。任何繞過這個程序的作法，我們將立即申請行政法院停止執行。法律不是你的橡皮圖章。'
+    },
+    {
+      avatar: '🏘️', role: '東嶺後山居民代表', stance: '無奈',
+      text: '後山人早就知道，什麼麻煩事都往我們這裡放。不是沒有科學道理，地質是好。但問題是：選項要公平提出來，討論要真的開放，不是先決定好了再來做公聽會走程序。'
+    },
+    {
+      avatar: '🗳️', role: '東嶺縣長', stance: '有條件反對',
+      text: '如果中央政府能夠承諾：完整的原住民族諮詢程序、十年以上的環境影響評估、地方回饋基金的自主管理權，以及定期撤場計畫——那我願意讓這個討論繼續。但目前你給我的只有一份選址公文。'
+    }
+  ],
+  island: [
+    {
+      avatar: '🌊', role: '黑潮族部落自治議會議長', stance: '憤怒控訴',
+      text: '四十年前，政府告訴我們那是「魚罐頭工廠」。四十年後，你現在站在這裡，還要繼續用什麼理由說服我們？我們已經說「不」說了四十年了。今天這場公聽會，是羞辱，不是尊重。'
+    },
+    {
+      avatar: '🏛️', role: '島上人權協會代表', stance: '譴責',
+      text: '幽嶼的案例是島上原住民族人權歷史上最嚴重的環境不正義事件。現在你要重演這個歷史，我們要求：立即撤回幽嶼選址，啟動歷史正義調查，讓族人優先決定幽嶼的未來，而不是讓核廢料替他們決定。'
+    },
+    {
+      avatar: '🌿', role: '黑潮族青年返鄉協會', stance: '不信任',
+      text: '我在都市讀書，每次回家都要路過那些鐵皮圍起來的桶子。部落的老人說那是「惡靈的容器」。我不是迷信，但我知道那裡面裝的是什麼。你有什麼資格再來問我們的「意見」？'
+    },
+    {
+      avatar: '🔬', role: '核廢料管理技術審議委員', stance: '技術反對',
+      text: '技術層面，幽嶼的地質評分是所有選址中最低的。海島地質、鹽分侵蝕、地震活動都是問題。我無法在技術上支持這個選址。如果部長仍然堅持，我必須公開聲明我的異議。'
+    },
+    {
+      avatar: '📰', role: '媒體聯合採訪代表', stance: '質問',
+      text: '部長，我想請教：你選擇幽嶼，是因為地質最適合嗎——技術委員說不是。是因為政治成本最低嗎——那你有沒有想過，代價不是政治成本，是另一個族群的歷史尊嚴？這場公聽會是給誰看的？'
+    }
+  ]
+};
+
+// ════════════════════════════════════════
+// RESPONSE STRATEGIES (same for all sites)
+// ════════════════════════════════════════
+const RESPONSES = [
+  {
+    id: 'science',
+    type: '🔬 科學說明',
+    label: '引用技術數據，說明安全標準',
+    effects: { opinion: +5, trust: +8, political: +3 },
+    feedback: {
+      default: '你用技術語言回應了對方的情緒訴求。部分人認為你認真對待問題，但更多人覺得你在迴避他們真正在問的事。',
+      island: '技術數據在這裡失去說服力。你回答了「安不安全」，但對方問的是「你有沒有把我們當人看」。',
+      elder: '老人沒有在問數據。你的科學說明讓現場沉默了幾秒，然後他搖了搖頭。'
+    }
+  },
+  {
+    id: 'compensate',
+    type: '💰 補償協商',
+    label: '提出地方回饋金與就業機會',
+    effects: { opinion: +15, trust: -8, political: +5 },
+    feedback: {
+      default: '補償承諾讓部分人安靜下來，但也讓另一部分人更憤怒：「你以為我們的家園是可以買的？」民意接受度提升，但信任受損。',
+      island: '族人代表站起來離席。「我們不是要補償金，我們是要你們把廢料搬走。」',
+      farmer: '農民說：「就算給我十倍補償，我吃飯的土地只有一塊。」'
+    }
+  },
+  {
+    id: 'listen',
+    type: '👂 傾聽承諾',
+    label: '表示理解並承諾持續溝通',
+    effects: { opinion: +8, trust: +12, political: -5 },
+    feedback: {
+      default: '你的傾聽姿態讓現場降溫。信任提升，但有人說：「每次都說要溝通，然後呢？」政治存活因為「沒有推進」而略降。',
+      island: '黑潮族議長說：「溝通，四十年前你們說要溝通，廢料還在那裡。」',
+      county: '縣長說：「好，那我們繼續談。但請記住，你的承諾我們都記著。」'
+    }
+  },
+  {
+    id: 'authority',
+    type: '⚡ 強勢主導',
+    label: '強調國家政策必要性，宣示推進意志',
+    effects: { opinion: -12, trust: -15, political: +10 },
+    feedback: {
+      default: '你的強硬姿態讓反對派更加憤怒，但讓支持者認為「終於有人敢做決定了」。民意和信任大跌，政治存活短期上升。',
+      island: '現場有人站起來高喊，隨後公聽會陷入混亂。三位發言人拒絕繼續。',
+      scientist: '技術委員搖頭說：「這不是程序問題，這是科學問題，你不能用意志力解決地質。」'
+    }
+  }
+];
+
+// ════════════════════════════════════════
+// ROLES
+// ════════════════════════════════════════
+const ROLES = {
+  minister: {
+    id: 'minister', emoji: '🏛️', title: '能源部長',
+    tag: '中央政府', tagBg: 'rgba(217,119,6,0.2)', tagColor: '#fbbf24',
+    desc: '你被任命來解決這個問題。手上有預算、有行政命令、有公關團隊。你的失敗是整個政府的失敗。',
+    start: { opinion: 30, trust: 50, political: 60 },
+    effects: {
+      science:    { opinion: +5,  trust: +8,  political: +3 },
+      compensate: { opinion: +15, trust: -8,  political: +5 },
+      listen:     { opinion: +8,  trust: +12, political: -5 },
+      authority:  { opinion: -12, trust: -15, political: +10 }
+    }
+  },
+  mayor: {
+    id: 'mayor', emoji: '🗳️', title: '在地縣長',
+    tag: '地方政府', tagBg: 'rgba(22,163,74,0.2)', tagColor: '#4ade80',
+    desc: '你是選出來的，不是任命的。這裡是你的選區、你的鄰居、你的選票。你比任何人都了解這片土地，也比任何人都更無法逃避後果。',
+    start: { opinion: 50, trust: 68, political: 35 },
+    effects: {
+      science:    { opinion: +4,  trust: +10, political: +2 },
+      compensate: { opinion: +10, trust: -14, political: +3 },
+      listen:     { opinion: +12, trust: +18, political: -8 },
+      authority:  { opinion: -18, trust: -20, political: +7 }
+    }
+  },
+  corporate: {
+    id: 'corporate', emoji: '⚡', title: '電力公司代言人',
+    tag: '電力公司', tagBg: 'rgba(37,99,235,0.2)', tagColor: '#93c5fd',
+    desc: '你代表電力公司。你有最詳細的技術數據、最充足的補償預算，也有最低的公眾信任度。每個人都覺得你有所圖——因為確實如此。',
+    start: { opinion: 15, trust: 25, political: 75 },
+    effects: {
+      science:    { opinion: +8,  trust: +10, political: +2 },
+      compensate: { opinion: +22, trust: -16, political: +7 },
+      listen:     { opinion: +5,  trust: +7,  political: -7 },
+      authority:  { opinion: -18, trust: -22, political: +12 }
+    }
+  }
+};
+
+// ════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════
+let selectedSiteId = null;
+let selectedRoleId = 'minister';
+let currentRound = 0;
+let stats = { opinion: 30, trust: 50, political: 60 };
+let strategyCounts = { science: 0, compensate: 0, listen: 0, authority: 0 };
+let responsePending = false;
+let shuffledSpeakers = [];
+
+function clamp(v) { return Math.max(0, Math.min(100, v)); }
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// ════════════════════════════════════════
+// SITE SELECT
+// ════════════════════════════════════════
+function goToRoleSelect() {
+  showScreen('screen-role');
+  renderRoleGrid();
+}
+
+function renderRoleGrid() {
+  const grid = document.getElementById('role-grid');
+  grid.innerHTML = '';
+  Object.values(ROLES).forEach(role => {
+    const div = document.createElement('div');
+    div.className = `role-card${selectedRoleId === role.id ? ' selected' : ''}`;
+    div.onclick = () => selectRole(role.id);
+    const s = role.start;
+    div.innerHTML = `
+      <div class="role-card-header">
+        <div class="role-emoji">${role.emoji}</div>
+        <div>
+          <div class="role-name">${role.title}</div>
+          <span class="role-tag" style="background:${role.tagBg};color:${role.tagColor};border:1px solid ${role.tagColor}40">${role.tag}</span>
+        </div>
+      </div>
+      <div class="role-desc">${role.desc}</div>
+      <div class="role-stats">
+        <div class="role-stat">民意 <span>${s.opinion}</span></div>
+        <div class="role-stat">信任 <span>${s.trust}</span></div>
+        <div class="role-stat">政治存活 <span>${s.political}</span></div>
+      </div>`;
+    grid.appendChild(div);
+  });
+}
+
+function selectRole(roleId) {
+  selectedRoleId = roleId;
+  document.querySelectorAll('.role-card').forEach(el => el.classList.remove('selected'));
+  document.getElementById('role-grid').querySelectorAll('.role-card').forEach((el, i) => {
+    if (Object.keys(ROLES)[i] === roleId) el.classList.add('selected');
+  });
+  document.getElementById('role-confirm-btn').disabled = false;
+}
+
+function confirmRole() {
+  showScreen('screen-site');
+  renderSiteGrid();
+}
+
+function goToSiteSelect() {
+  showScreen('screen-site');
+  renderSiteGrid();
+}
+
+function renderSiteGrid() {
+  const grid = document.getElementById('site-grid');
+  grid.innerHTML = '';
+  const normal = shuffle(SITES.filter(s => !s.isSpecial));
+  const special = SITES.filter(s => s.isSpecial);
+  [...normal, ...special].forEach(site => {
+    const div = document.createElement('div');
+    div.className = `site-option${site.isSpecial ? ' danger-opt' : ''}`;
+    div.id = 'site-opt-' + site.id;
+    div.onclick = () => selectSite(site.id);
+    const pillsHTML = site.pills.map((p, i) =>
+      `<span class="pill ${site.pillTypes[i]}">${p}</span>`
+    ).join('');
+    div.innerHTML = `
+      <div class="site-opt-header">
+        <div>
+          <div class="site-opt-name">${site.name}</div>
+          <div class="site-opt-note">${site.note}</div>
+        </div>
+        ${site.isSpecial ? '<span class="site-opt-warn">⚠️ 歷史敏感地</span>' : ''}
+      </div>
+      <div class="site-pills">${pillsHTML}</div>
+    `;
+    grid.appendChild(div);
+  });
+}
+
+function selectSite(siteId) {
+  selectedSiteId = siteId;
+  document.querySelectorAll('.site-option').forEach(el => el.classList.remove('selected'));
+  document.getElementById('site-opt-' + siteId).classList.add('selected');
+  document.getElementById('site-confirm-btn').disabled = false;
+}
+
+function confirmSite() {
+  if (!selectedSiteId) return;
+  trackPlay('ep3');
+  const role = ROLES[selectedRoleId];
+  currentRound = 0;
+  stats = { ...role.start };
+  strategyCounts = { science: 0, compensate: 0, listen: 0, authority: 0 };
+  shuffledSpeakers = shuffle(SPEAKERS_BY_SITE[selectedSiteId]);
+  showScreen('screen-hearing');
+  const site = SITES.find(s => s.id === selectedSiteId);
+  document.getElementById('hearing-location-label').textContent = `📍 公聽會地點：${site.name}`;
+  const badge = document.getElementById('role-badge-inline');
+  if (badge) { badge.textContent = role.emoji + ' ' + role.title; }
+  renderHearing();
+}
+
+// ════════════════════════════════════════
+// HEARING
+// ════════════════════════════════════════
+function renderHearing() {
+  const speakers = shuffledSpeakers;
+  const speaker = speakers[currentRound];
+  responsePending = false;
+
+  // Round dots
+  const dotsEl = document.getElementById('round-dots');
+  dotsEl.innerHTML = '';
+  for (let i = 0; i < speakers.length; i++) {
+    const dot = document.createElement('div');
+    dot.className = `round-dot ${i < currentRound ? 'done' : i === currentRound ? 'current' : ''}`;
+    dotsEl.appendChild(dot);
+  }
+  const lbl = document.createElement('span');
+  lbl.className = 'round-label';
+  lbl.textContent = `第 ${currentRound + 1} / ${speakers.length} 位`;
+  dotsEl.appendChild(lbl);
+
+  // Speaker card — set content then retrigger entrance animation
+  const cardEl = document.getElementById('speaker-card');
+  cardEl.classList.remove('entering');
+  cardEl.innerHTML = `
+    <div class="speaker-meta">
+      <div class="speaker-avatar">${speaker.avatar}</div>
+      <div class="speaker-info">
+        <div class="speaker-role">${speaker.role}</div>
+        <div class="speaker-stance">立場：${speaker.stance}</div>
+      </div>
+    </div>
+    <div class="speaker-text">${speaker.text}</div>
+  `;
+  // force reflow so removing the class actually resets the animation
+  void cardEl.offsetWidth;
+  cardEl.classList.add('entering');
+
+  // Response options — staggered slide-in
+  const optEl = document.getElementById('response-options');
+  optEl.innerHTML = '';
+  RESPONSES.forEach((r, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'response-btn';
+    btn.style.animationDelay = `${0.22 + i * 0.07}s`;
+    btn.innerHTML = `<div class="rb-type">${r.type}</div>${r.label}`;
+    btn.onclick = () => chooseResponse(r.id);
+    optEl.appendChild(btn);
+  });
+
+  // Hide feedback & next btn
+  document.getElementById('feedback-banner').className = 'feedback-banner';
+  document.getElementById('next-btn').style.display = 'none';
+
+  updateMeters();
+}
+
+function chooseResponse(responseId) {
+  if (responsePending) return;
+  responsePending = true;
+
+  const response = RESPONSES.find(r => r.id === responseId);
+  const speaker = shuffledSpeakers[currentRound];
+  strategyCounts[responseId]++;
+
+  // Apply role-specific effects
+  let { opinion, trust, political } = ROLES[selectedRoleId].effects[responseId];
+
+  // Special modifiers for certain site/speaker combos
+  if (selectedSiteId === 'island') {
+    opinion = Math.min(opinion, 0);  // no positive opinion gain on island
+    if (responseId === 'authority') { trust -= 10; political -= 5; }
+  }
+  if (responseId === 'authority' && (selectedSiteId === 'north' || selectedSiteId === 'central')) {
+    opinion -= 8; // extra backlash in highly populated/farming areas
+  }
+  if (responseId === 'compensate' && selectedSiteId === 'east') {
+    trust -= 5; // indigenous people especially distrust compensation framing
+  }
+
+  stats.opinion = clamp(stats.opinion + opinion);
+  stats.trust = clamp(stats.trust + trust);
+  stats.political = clamp(stats.political + political);
+
+  // Feedback text
+  let feedbackText = response.feedback.default;
+  if (selectedSiteId === 'island') feedbackText = response.feedback.island || feedbackText;
+  else if (speaker.role.includes('耆老') || speaker.role.includes('老人')) feedbackText = response.feedback.elder || feedbackText;
+  else if (speaker.role.includes('農') || speaker.role.includes('漁')) feedbackText = response.feedback.farmer || feedbackText;
+  else if (speaker.role.includes('縣長')) feedbackText = response.feedback.county || feedbackText;
+  else if (speaker.role.includes('技術') || speaker.role.includes('委員')) feedbackText = response.feedback.scientist || feedbackText;
+
+  // Effect string
+  const fx = [
+    opinion !== 0 ? `民意 ${opinion > 0 ? '+' : ''}${opinion}` : null,
+    trust !== 0 ? `信任 ${trust > 0 ? '+' : ''}${trust}` : null,
+    political !== 0 ? `政治存活 ${political > 0 ? '+' : ''}${political}` : null
+  ].filter(Boolean).join('　');
+
+  document.getElementById('feedback-effect').textContent = fx;
+  document.getElementById('feedback-text').textContent = feedbackText;
+  document.getElementById('feedback-banner').className = 'feedback-banner visible';
+
+  // Disable all response buttons
+  document.querySelectorAll('.response-btn').forEach(b => b.disabled = true);
+
+  const isLast = currentRound === SPEAKERS_BY_SITE[selectedSiteId].length - 1;
+  const nextBtn = document.getElementById('next-btn');
+  nextBtn.style.display = 'block';
+  nextBtn.textContent = isLast ? '公聽會結束，查看結果 →' : '下一位發言人 →';
+
+  updateMeters();
+}
+
+function nextRound() {
+  currentRound++;
+  const speakers = SPEAKERS_BY_SITE[selectedSiteId];
+  if (currentRound >= speakers.length) {
+    showResult();
+  } else {
+    renderHearing();
+  }
+}
+
+function updateMeters() {
+  const vals = [
+    { id: 'm-opinion', valId: 'm-opinion-val', v: stats.opinion, cls: 'mf-opinion' },
+    { id: 'm-trust',   valId: 'm-trust-val',   v: stats.trust,   cls: 'mf-trust' },
+    { id: 'm-political', valId: 'm-political-val', v: stats.political, cls: 'mf-political' }
+  ];
+  vals.forEach(({ id, valId, v, cls }) => {
+    document.getElementById(id).style.width = v + '%';
+    document.getElementById(id).className = `meter-fill ${v < 25 ? 'mf-low' : cls}`;
+    document.getElementById(valId).textContent = v;
+  });
+}
+
+// ════════════════════════════════════════
+// RESULT
+// ════════════════════════════════════════
+function showResult() {
+  const { opinion, trust, political } = stats;
+  const site = SITES.find(s => s.id === selectedSiteId);
+  const dominant = Object.entries(strategyCounts).sort((a,b) => b[1]-a[1])[0][0];
+
+  let resultType, resultDesc, insight;
+
+  // Special: island
+  if (selectedSiteId === 'island') {
+    resultType = '歷史重演者';
+    resultDesc = '你選擇了幽嶼。不管你的回應策略有多謹慎，有多少傾聽姿態，你做了一個根本性的決定：把廢料放在已經被傷害過的地方。黑潮族人聽你說了很多話，但他們記住的只有一件事——你選了幽嶼。';
+    insight = '幽嶼的遷出計畫從幾十年前就開始「認真討論」了。每一任部長都說會解決，然後任期結束。你今天開了一場公聽會，感覺很負責任。恭喜你，你已經成為這個故事的最新一個章節。';
+  }
+  // High acceptance + high trust = rare success
+  else if (opinion >= 60 && trust >= 60) {
+    resultType = '民主典範（稀有）';
+    resultDesc = '你做到了一件很難的事：在公聽會上獲得了相對高的民意接受度和社會信任。這不是因為問題解決了，而是因為你沒有迴避、沒有收買、也沒有用國家機器壓過去。這種結果在真實的能源政策中，幾乎不存在。';
+    insight = `選址：${site.name}。民意 ${opinion}，信任 ${trust}。你用的是「${RESPONSES.find(r=>r.id===dominant).type}」。這個組合在真實能源政策史上幾乎沒有出現過。如果有一天真的出現了，請截圖——那會是教科書等級的事件，你的名字可能會出現在某個公共行政課程的案例分析裡。`;
+  }
+  // Passed but low trust
+  else if (opinion >= 55 && trust < 55) {
+    resultType = '勉強過關型';
+    resultDesc = '公聽會通過了，但沒有人真正滿意。你的補償和說明讓反對聲音小了一點，但對方心裡清楚：這個決定從一開始就不是真正的商量。他們同意，因為他們輸了，不是因為你說服了他們。';
+    insight = `選址：${site.name}。民意 ${opinion}，信任 ${trust}，政治存活 ${political}。「勉強過關」其實是島上基礎建設的標配——你查一下，幾乎每條重大工程都這樣蓋起來的。沒有人滿意，但事情發生了。這叫做「民主的日常」，或者叫做「大家都太累了」。`;
+  }
+  // Political collapse
+  else if (political < 30) {
+    resultType = '內閣垮台型';
+    resultDesc = '公聽會結束了，你的政治生命也差不多了。你可能選了技術上正確的地點，可能也盡力傾聽了，但在民主體制中，一個讓自己的政治存活歸零的決定，就是沒有決定。核廢料的問題繼續留給下一任部長。';
+    insight = `選址：${site.name}。政治存活剩 ${political}。島上的最終處置場問題懸置了幾十年，每一任部長的標準動作是：開個研討會、成立一個委員會、然後在任期結束前把問題完整打包交給繼任者。你選擇了不一樣的路。核廢料還在，但你已經不在了。`;
+  }
+  // Low opinion, still standing
+  else if (opinion < 40) {
+    resultType = '強行推進型';
+    resultDesc = '你撐下來了，但代價是民意的全面崩解。你的選址可能在技術上有道理，但你用的方式告訴所有人：這個政府不需要他們的同意，只需要他們接受。這種核廢料被「放」進去了，但埋下的是另一種更難處理的廢料——不信任。';
+    insight = `選址：${site.name}。民意 ${opinion}，信任 ${trust}。強行放進去的東西，通常在下一次政黨輪替後的第一個月就被翻案。然後核廢料又沒有地方去了。然後又是二十年。然後又一個部長說：「我們要認真面對這個問題。」你知道接下來會怎樣。`;
+  }
+  // Default
+  else {
+    resultType = '折衷妥協型';
+    resultDesc = '你在衝突與迴避之間找到了某種平衡。既沒有完全失去民心，也沒有建立真正的信任。這是最常見的政治選擇，也是為什麼問題不斷被拖延的原因。';
+    insight = `選址：${site.name}。民意 ${opinion}，信任 ${trust}，政治存活 ${political}。主要策略：「${RESPONSES.find(r=>r.id===dominant).type}」。折衷的學名叫「迴避性共識」——所有人都說「這樣也可以吧」，但沒有人真的同意。這是島上把問題留給下一代最有效率的方式。`;
+  }
+
+  // Strategy summary
+  const stratHTML = RESPONSES.map(r => `
+    <div class="strategy-row">
+      <span>${r.type}</span>
+      <span class="st-count">${strategyCounts[r.id]} 次</span>
+    </div>
+  `).join('');
+
+  const shareText = `我是「${resultType}」！\n核廢料放你家 EP.3 公聽會模擬\n🏝️ 鬼島鄉民測驗核電篇`;
+  window._shareText = shareText;
+
+  document.getElementById('result-content').innerHTML = `
+    <div class="result-card">
+      <div class="result-top">你的公聽會結果——</div>
+      <div class="result-type">${resultType}</div>
+      <p class="result-desc">${resultDesc}</p>
+
+      <div class="score-grid">
+        <div class="score-box">
+          <div class="sv" style="color:${opinion>=60?'#4ade80':opinion>=40?'#fbbf24':'#f87171'}">${opinion}</div>
+          <div class="sl">民意接受度</div>
+        </div>
+        <div class="score-box">
+          <div class="sv" style="color:${trust>=60?'#60a5fa':trust>=40?'#fbbf24':'#f87171'}">${trust}</div>
+          <div class="sl">社會信任</div>
+        </div>
+        <div class="score-box">
+          <div class="sv" style="color:${political>=50?'#fbbf24':political>=30?'#f97316':'#f87171'}">${political}</div>
+          <div class="sl">政治存活</div>
+        </div>
+      </div>
+
+      <div style="font-size:0.78rem;color:var(--muted);font-weight:700;letter-spacing:0.04em;margin-bottom:6px;">你的應對策略分布</div>
+      <div class="strategy-list">${stratHTML}</div>
+
+      <div class="comparison-box">
+        <div class="ct">▌ 現實插播</div>
+        ${insight}
+      </div>
+
+      <div class="share-row">
+        <button class="share-btn share-fb" onclick="shareFB()">分享到 FB</button>
+        <button class="share-btn share-line" onclick="shareLINE()">分享到 LINE</button>
+      </div>
+      <button class="btn btn-secondary" onclick="restartGame()">↺ 重新選址</button>
+    </div>
+  `;
+
+  showScreen('screen-result');
+}
+
+// ════════════════════════════════════════
+// UTILS
+// ════════════════════════════════════════
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+function shareFB() {
+  const url = 'https://scatjay.github.io/nuke-or-not/ep3-w4x/';
+  window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url), '_blank');
+}
+function shareLINE() {
+  const text = window._shareText + '\nhttps://scatjay.github.io/nuke-or-not/ep3-w4x/';
+  window.open('https://line.me/R/msg/text/?' + encodeURIComponent(text), '_blank');
+}
+function copyResult(event) {
+  const text = window._shareText + '\nhttps://scatjay.github.io/nuke-or-not/ep3-w4x/';
+  navigator.clipboard.writeText(text).catch(() => {});
+  event.target.textContent = '✓ 已複製';
+  setTimeout(() => { event.target.textContent = '複製結果'; }, 2000);
+}
+function restartGame() {
+  selectedSiteId = null;
+  goToSiteSelect();
+}
+
+// ── PLAY COUNTER ──
+const SB_URL = '';
+const SB_KEY = '';
+
+async function trackPlay(game) {
+  const k = `ghost_plays_${game}`;
+  localStorage.setItem(k, String(parseInt(localStorage.getItem(k) || '0', 10) + 1));
+  if (SB_URL && SB_KEY) {
+    try {
+      await fetch(`${SB_URL}/rest/v1/rpc/increment_play`, {
+        method: 'POST',
+        headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ gid: game })
+      });
+    } catch(e) {}
+  }
+}
+</script>
+</body>
+</html>
