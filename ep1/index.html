@@ -2414,21 +2414,12 @@ function showScreen(id) {
 }
 
 // ── PLAY COUNTER ──
-const SB_URL = '';  // 填入 Supabase URL 啟用全域計數
-const SB_KEY = '';  // 填入 Supabase anon key
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbxwKJuNDd30vwQ8QuTtl1GeRgSrjQADADG7to8ItSU8yUC6w2LBDGMz7Bj2VHdFPxJf1A/exec';
 
 async function trackPlay(game) {
   const k = `ghost_plays_${game}`;
   localStorage.setItem(k, String(parseInt(localStorage.getItem(k) || '0', 10) + 1));
-  if (SB_URL && SB_KEY) {
-    try {
-      await fetch(`${SB_URL}/rest/v1/rpc/increment_play`, {
-        method: 'POST',
-        headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ gid: game })
-      });
-    } catch(e) {}
-  }
+  try { fetch(`${GAS_URL}?game=${game}&action=hit`); } catch(e) {}
 }
 
 // ── BOOT ──
